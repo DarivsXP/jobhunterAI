@@ -1,0 +1,1 @@
+JobHunterAI is an AI-powered remote job assistant that automatically discovers remote software engineering opportunities, prioritizes them based on a developer's skills and experience, and delivers actionable recommendations through Telegram.
