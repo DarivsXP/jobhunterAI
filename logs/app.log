@@ -1,1 +1,49 @@
 2026-06-25 21:01:50,705 | INFO | __main__ | Checking Remotive...
+2026-06-25 21:04:48,192 | INFO | core.database | Initializing database...
+2026-06-25 21:18:24,561 | INFO | telegram.bot | Sending Telegram message...
+2026-06-25 21:23:06,597 | INFO | telegram.bot | Sending Telegram message...
+2026-06-25 21:34:04,806 | INFO | __main__ | Starting JobHunterAI
+2026-06-25 21:34:04,809 | INFO | core.database | Initializing database...
+2026-06-25 21:34:04,810 | INFO | core.orchestrator | Starting job scan...
+2026-06-25 21:34:04,810 | INFO | scrapers.remotive | Fetching jobs from Remotive...
+2026-06-25 21:34:05,246 | INFO | scrapers.remotive | Retrieved 32 jobs.
+2026-06-25 21:34:05,248 | INFO | core.orchestrator | 32 jobs collected.
+2026-06-25 21:39:10,518 | INFO | __main__ | Starting JobHunterAI
+2026-06-25 21:39:10,519 | INFO | core.database | Initializing database...
+2026-06-25 21:39:10,520 | INFO | core.orchestrator | Starting job scan...
+2026-06-25 21:39:10,520 | INFO | scrapers.remotive | Fetching jobs from Remotive...
+2026-06-25 21:39:10,925 | INFO | scrapers.remotive | Retrieved 32 jobs.
+2026-06-25 21:39:10,926 | INFO | core.orchestrator | 32 jobs collected.
+2026-06-25 21:39:10,926 | INFO | core.database | Saving: Staff Product Engineer (São Paulo)
+2026-06-25 21:39:10,932 | INFO | core.database | Saving: Senior Quality Engineer (Florianópolis)
+2026-06-25 21:39:10,936 | INFO | core.database | Saving: Senior Quality Engineer (São Paulo)
+2026-06-25 21:39:10,940 | INFO | core.database | Saving: Senior Quality Engineer (Belo Horizonte)
+2026-06-25 21:39:10,943 | INFO | core.database | Saving: Senior Quality Engineer (Campinas)
+2026-06-25 21:39:10,946 | INFO | core.database | Saving: Senior Quality Engineer (Porto Alegre)
+2026-06-25 21:39:10,949 | INFO | core.database | Saving: Mid/Senior AI Cinematic Video Editor
+2026-06-25 21:39:10,952 | INFO | core.database | Saving: Senior Independent AI Engineer / Architect
+2026-06-25 21:39:10,956 | INFO | core.database | Saving: Senior Independent Software Developer
+2026-06-25 21:39:10,959 | INFO | core.database | Saving: Frontend Developer
+2026-06-25 21:39:10,962 | INFO | core.database | Saving: Tech Lead Full-Stack Rails Engineer
+2026-06-25 21:39:10,965 | INFO | core.database | Saving: Assistant Account Payable
+2026-06-25 21:39:10,968 | INFO | core.database | Saving: Head of Engineering
+2026-06-25 21:39:10,971 | INFO | core.database | Saving: Office Assistant
+2026-06-25 21:39:10,975 | INFO | core.database | Saving: Quality Assurance Rater - German (Germany)
+2026-06-25 21:39:10,978 | INFO | core.database | Saving: Senior Data Scientist
+2026-06-25 21:39:10,981 | INFO | core.database | Saving: iOS Developer
+2026-06-25 21:39:10,984 | INFO | core.database | Saving: High-Ticket Financial Sales Specialist & Team Lead Track
+2026-06-25 21:39:10,987 | INFO | core.database | Saving: Inside Sales Contractor
+2026-06-25 21:39:10,991 | INFO | core.database | Saving: Online Data Analyst Canada (French Language)
+2026-06-25 21:39:10,994 | INFO | core.database | Saving: Online Data Analyst United States Spanish speakers
+2026-06-25 21:39:10,997 | INFO | core.database | Saving: Online Data Analyst Canada
+2026-06-25 21:39:11,001 | INFO | core.database | Saving: Freelance Writer
+2026-06-25 21:39:11,004 | INFO | core.database | Saving: Head of Sales
+2026-06-25 21:39:11,008 | INFO | core.database | Saving: Copywriter
+2026-06-25 21:39:11,011 | INFO | core.database | Saving: Staff Software Engineer, Product (Belo Horizonte)
+2026-06-25 21:39:11,014 | INFO | core.database | Saving: Staff Software Engineer, Product (Florianópolis)
+2026-06-25 21:39:11,017 | INFO | core.database | Saving: Staff Software Engineer, Product (Porto Alegre)
+2026-06-25 21:39:11,020 | INFO | core.database | Saving: Staff Software Engineer, Product (São Paulo)
+2026-06-25 21:39:11,023 | INFO | core.database | Saving: Customer Operations & Writing Specialist
+2026-06-25 21:39:11,026 | INFO | core.database | Saving: Staff Software Engineer, Product (Campinas)
+2026-06-25 21:39:11,029 | INFO | core.database | Saving: Data Labeling Specialists
+2026-06-25 21:39:11,032 | INFO | core.orchestrator | 32 new jobs saved.
