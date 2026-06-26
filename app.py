@@ -1,24 +1,16 @@
-"""
-JobHunterAI
-
-Application entry point.
-"""
-
-from core.logger import get_logger
-from core.scheduler import Scheduler
-
-logger = get_logger(__name__)
+from core.database import Database
+from core.logger import logger
 
 
-def main():
+def main() -> None:
 
-    logger.info("=" * 50)
-    logger.info("Starting JobHunterAI")
-    logger.info("=" * 50)
+    logger.info("Starting JobHunterAI v0.8")
 
-    scheduler = Scheduler()
+    database = Database()
 
-    scheduler.start()
+    database.initialize()
+
+    logger.info("Application ready.")
 
 
 if __name__ == "__main__":

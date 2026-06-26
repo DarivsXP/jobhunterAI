@@ -2,36 +2,79 @@
 Job Normalizer
 
 Normalizes job data from different job boards into
-a consistent format.
+a consistent format before the job enters the pipeline.
 """
+
+from __future__ import annotations
+
+import html
+import re
+from urllib.parse import urlsplit, urlunsplit
 
 from core.models import Job
 
 
 class JobNormalizer:
+    """Normalizes Job objects."""
+
+    _whitespace = re.compile(r"\s+")
+    _html_tags = re.compile(r"<[^>]+>")
 
     def normalize(self, job: Job) -> Job:
-        """
-        Clean and normalize job fields.
-        """
+        job.title = self._clean_text(job.title).title()
 
-        job.title = job.title.strip()
+        job.company = self._clean_text(job.company)
 
-        job.company = job.company.strip()
+        job.description = self._clean_description(job.description)
 
-        job.description = job.description.strip()
+        job.country = self._clean_text(job.country)
 
-        job.country = job.country.strip()
+        job.source = self._clean_text(job.source)
 
-        job.source = job.source.strip()
+        job.url = self._normalize_url(job.url)
 
-        if not job.salary:
+        if not job.salary.strip():
             job.salary = "Not specified"
 
         if not job.country:
             job.country = "Worldwide"
 
-        if not job.posted_at:
+        if not job.posted_at.strip():
             job.posted_at = "Unknown"
 
         return job
+
+    def _clean_text(self, value: str) -> str:
+        if not value:
+            return ""
+
+        value = html.unescape(value)
+        value = value.replace("\u00a0", " ")
+        value = self._whitespace.sub(" ", value)
+
+        return value.strip()
+
+    def _clean_description(self, value: str) -> str:
+        value = self._clean_text(value)
+
+        value = self._html_tags.sub(" ", value)
+
+        value = self._whitespace.sub(" ", value)
+
+        return value.strip()
+
+    def _normalize_url(self, url: str) -> str:
+        if not url:
+            return ""
+
+        parts = urlsplit(url.strip())
+
+        return urlunsplit(
+            (
+                parts.scheme.lower(),
+                parts.netloc.lower(),
+                parts.path,
+                "",
+                "",
+            )
+        )
