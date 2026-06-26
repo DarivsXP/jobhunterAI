@@ -1,0 +1,35 @@
+[33mcommit 000f835736e93b7ac53f516e27570a5a66f55fed[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: DarivsXP <darivsxp@gmail.com>
+Date:   Fri Jun 26 23:34:20 2026 +0800
+
+    Improvements
+
+ .env                                          |   5 [32m+[m[31m-[m
+ .gitignore                                    |   8 [32m++[m
+ README.md                                     |  44 [32m++++++++++[m[31m-[m
+ app.py                                        |  22 [32m++[m[31m----[m
+ config/__init__.py                            |   0
+ config/settings.py                            |  32 [32m++++++++[m
+ core/__init__.py                              |  11 [32m+[m[31m--[m
+ core/__pycache__/__init__.cpython-314.pyc     | Bin [31m409[m -> [32m187[m bytes
+ core/__pycache__/database.cpython-314.pyc     | Bin [31m4640[m -> [32m2698[m bytes
+ core/__pycache__/fingerprint.cpython-314.pyc  | Bin [31m1305[m -> [32m0[m bytes
+ core/__pycache__/logger.cpython-314.pyc       | Bin [31m1541[m -> [32m2171[m bytes
+ core/__pycache__/normalizer.cpython-314.pyc   | Bin [31m1664[m -> [32m0[m bytes
+ core/__pycache__/orchestrator.cpython-314.pyc | Bin [31m3180[m -> [32m0[m bytes
+ core/__pycache__/ranker.cpython-314.pyc       | Bin [31m1084[m -> [32m0[m bytes
+ core/__pycache__/recruiter.cpython-314.pyc    | Bin [31m4716[m -> [32m0[m bytes
+ core/__pycache__/scheduler.cpython-314.pyc    | Bin [31m1650[m -> [32m0[m bytes
+ core/__pycache__/schema.cpython-314.pyc       | Bin [31m137[m -> [32m0[m bytes
+ core/database.py                              | 110 [32m++++++++[m[31m------------------[m
+ core/logger.py                                |  46 [32m++++++++[m[31m---[m
+ core/migrations.py                            |  63 [32m+++++++++++++++[m
+ core/normalizer.py                            |  67 [32m+++++++++++++[m[31m---[m
+ core/schema.py                                |  34 [32m++++++++[m
+ core/scorer.py                                |   2 [32m+[m[31m-[m
+ modules/__init__.py                           |   0
+ requirements.txt                              |   3 [32m+[m
+ scrapers/__pycache__/registry.cpython-314.pyc | Bin [31m309[m -> [32m309[m bytes
+ services/database_service.py                  |  60 [32m++++++++++++[m[31m--[m
+ tests/__init__.py                             |   0
+ 28 files changed, 371 insertions(+), 136 deletions(-)
