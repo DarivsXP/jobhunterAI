@@ -1,19 +1,13 @@
 """
 JobHunterAI Orchestrator
-
-Coordinates the entire job hunting pipeline.
 """
 
-from typing import List
-
-from core.database import JobRepository
 from core.logger import get_logger
-from core.models import Job
-from core.recruiter import Recruiter
 
-from telegram.bot import TelegramBot
-
-from scrapers.remotive import fetch_jobs
+from services.scraper_service import ScraperService
+from services.recruiter_service import RecruiterService
+from services.database_service import DatabaseService
+from services.notification_service import NotificationService
 
 logger = get_logger(__name__)
 
@@ -22,74 +16,81 @@ class JobOrchestrator:
 
     def __init__(self):
 
-        logger.info("Initializing JobOrchestrator...")
+        logger.info("Initializing JobHunterAI...")
 
-        self.db = JobRepository()
+        self.scraper = ScraperService()
 
-        self.bot = TelegramBot()
+        self.recruiter = RecruiterService()
 
-        self.recruiter = Recruiter()
+        self.database = DatabaseService()
+
+        self.notification = NotificationService()
 
     def run(self):
 
-    logger.info("Starting job scan...")
+        logger.info("=" * 50)
+        logger.info("Starting Job Scan")
+        logger.info("=" * 50)
 
-    jobs: List[Job] = []
+        #
+        # Step 1
+        #
 
-    jobs.extend(fetch_jobs())
+        jobs = self.scraper.collect_jobs()
 
-    logger.info(f"{len(jobs)} jobs collected.")
+        #
+        # Step 2
+        #
 
-    new_jobs = 0
-    duplicates = 0
-    rejected = 0
+        jobs = self.recruiter.process(
 
-    hot = 0
-    high = 0
-    good = 0
+            jobs,
 
-    for job in jobs:
+            self.database
 
-        if self.db.exists(job.url):
+        )
 
-            duplicates += 1
+        #
+        # Step 3
+        #
 
-            continue
+        self.database.save_all(jobs)
 
-        evaluation = self.recruiter.evaluate(job)
+        #
+        # Step 4
+        #
 
-        if not evaluation.accepted:
+        self.notification.notify(jobs)
 
-            rejected += 1
+        #
+        # Summary
+        #
 
-            continue
+        hot = len(
 
-        job.score = evaluation.score
+            [j for j in jobs if j.priority == "HOT"]
 
-        self.db.save(job)
+        )
 
-        new_jobs += 1
+        high = len(
 
-        if evaluation.priority == "HOT":
+            [j for j in jobs if j.priority == "HIGH"]
 
-            hot += 1
+        )
 
-            self.bot.send_hot_match(job)
+        good = len(
 
-        elif evaluation.priority == "HIGH":
+            [j for j in jobs if j.priority == "GOOD"]
 
-            high += 1
+        )
 
-        elif evaluation.priority == "GOOD":
+        logger.info("=" * 50)
+        logger.info("SCAN COMPLETE")
+        logger.info("=" * 50)
 
-            good += 1
+        logger.info(f"Accepted Jobs : {len(jobs)}")
+        logger.info(f"HOT Matches   : {hot}")
+        logger.info(f"HIGH Matches  : {high}")
+        logger.info(f"GOOD Matches  : {good}")
 
-    logger.info("--------------------------------")
-    logger.info(f"Jobs Collected : {len(jobs)}")
-    logger.info(f"New Jobs       : {new_jobs}")
-    logger.info(f"Duplicates     : {duplicates}")
-    logger.info(f"Rejected       : {rejected}")
-    logger.info(f"HOT            : {hot}")
-    logger.info(f"HIGH           : {high}")
-    logger.info(f"GOOD           : {good}")
-    logger.info("--------------------------------")
+        logger.info("=" * 50)
