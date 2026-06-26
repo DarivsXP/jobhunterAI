@@ -1,108 +1,62 @@
-"""
-Database Repository
-"""
-
-from pathlib import Path
 import sqlite3
+from pathlib import Path
 
-from core.logger import get_logger
-from core.models import Job
-from core.schema import JOBS_TABLE
-from core.migrations import MigrationManager
-
-logger = get_logger(__name__)
+from config.settings import settings
+from core.logger import logger
 
 
-class JobRepository:
+class Database:
 
-    def __init__(self):
+    def __init__(self) -> None:
 
-        Path("database").mkdir(exist_ok=True)
+        self.path = settings.database_path
 
-        self.connection = sqlite3.connect(
-            "database/jobs.db",
-            check_same_thread=False,
+        self.path.parent.mkdir(
+            parents=True,
+            exist_ok=True,
         )
 
-        self.connection.row_factory = sqlite3.Row
+    def connect(self) -> sqlite3.Connection:
 
-        self.cursor = self.connection.cursor()
+        return sqlite3.connect(self.path)
 
-        self.create_tables()
+    def initialize(self) -> None:
 
-        MigrationManager(
-            self.connection
-        ).migrate()
+        connection = self.connect()
 
-    def create_tables(self):
+        cursor = connection.cursor()
 
-        logger.info("Creating database tables...")
-
-        self.cursor.execute(JOBS_TABLE)
-
-        self.connection.commit()
-
-    def exists(self, fingerprint: str) -> bool:
-
-        self.cursor.execute(
-
-            "SELECT id FROM jobs WHERE fingerprint=?",
-
-            (fingerprint,)
-
-        )
-
-        return self.cursor.fetchone() is not None
-
-    def save(self, job: Job):
-
-        logger.info(f"Saving: {job.title}")
-
-        self.cursor.execute(
+        cursor.execute(
             """
-            INSERT OR IGNORE INTO jobs(
-                job.title,
-                job.company,
-                job.source,
-                job.url,
-                job.fingerprint,
-                job.score,
-                job.posted_at,
-                job.description
-                )
-            VALUES(?,?,?,?,?,?,?)
-            """,
-            (
-                job.title,
-                job.company,
-                job.source,
-                job.url,
-                job.score,
-                job.posted_at,
-                job.description,
-            ),
+            CREATE TABLE IF NOT EXISTS jobs(
+
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+                title TEXT NOT NULL,
+
+                company TEXT NOT NULL,
+
+                location TEXT,
+
+                source TEXT NOT NULL,
+
+                url TEXT UNIQUE NOT NULL,
+
+                description TEXT,
+
+                posted_at TEXT,
+
+                score INTEGER DEFAULT 0,
+
+                applied INTEGER DEFAULT 0,
+
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+            """
         )
 
-        self.connection.commit()
+        connection.commit()
 
-    def count(self) -> int:
+        connection.close()
 
-        self.cursor.execute(
-            "SELECT COUNT(*) FROM jobs"
-        )
-
-        return self.cursor.fetchone()[0]
-
-    def today(self):
-
-        self.cursor.execute("""
-        SELECT *
-        FROM jobs
-        ORDER BY score DESC
-        """)
-
-        return self.cursor.fetchall()
-
-    def close(self):
-
-        self.connection.close()
+        logger.info("Database initialized.")

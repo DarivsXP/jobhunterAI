@@ -77,5 +77,5 @@ class JobScorer:
         score += self.PORTFOLIO_WEIGHT
 
         reasons.append("Portfolio Match")
-
+        return min(score, 100), reasons
         return min(score, 100), reasons

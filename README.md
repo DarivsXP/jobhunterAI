@@ -1,1 +1,43 @@
-JobHunterAI is an AI-powered remote job assistant that automatically discovers remote software engineering opportunities, prioritizes them based on a developer's skills and experience, and delivers actionable recommendations through Telegram.
+# JobHunterAI v0.8
+
+AI-powered remote job hunter.
+
+## Features
+
+- Remote-only jobs
+- Junior developer focus
+- Resume scoring
+- Telegram alerts
+- AI recruiter
+- AI cover letters
+- Dashboard
+- Docker
+- GitHub Actions
+
+## Setup
+
+```bash
+python -m venv .venv
+
+source .venv/bin/activate
+
+pip install -r requirements.txt
+```
+
+Copy
+
+```
+.env.example
+```
+
+to
+
+```
+.env
+```
+
+Run
+
+```bash
+python app.py
+```
