@@ -8,45 +8,69 @@ import requests
 
 from core.logger import get_logger
 from core.models import Job
+from scrapers.base import BaseScraper
 
 logger = get_logger(__name__)
 
-URL = "https://remotive.com/api/remote-jobs"
 
+class RemotiveScraper(BaseScraper):
 
-def fetch_jobs() -> List[Job]:
-    """
-    Fetch jobs from Remotive.
-    """
+    URL = "https://remotive.com/api/remote-jobs"
 
-    logger.info("Fetching jobs from Remotive...")
+    def fetch_jobs(self) -> List[Job]:
 
-    response = requests.get(URL, timeout=30)
-    response.raise_for_status()
+        logger.info("Fetching jobs from Remotive...")
 
-    data = response.json()
-
-    jobs: List[Job] = []
-
-    for item in data["jobs"]:
-
-        jobs.append(
-            Job(
-                title=item.get("title", ""),
-                company=item.get("company_name", ""),
-                description=item.get("description", ""),
-                url=item.get("url", ""),
-                posted_at=item.get("publication_date", ""),
-                salary=item.get("salary", "Not specified"),
-                country=item.get(
-                    "candidate_required_location",
-                    "Worldwide",
-                ),
-                remote=True,
-                source="Remotive",
-            )
+        response = requests.get(
+            self.URL,
+            timeout=30
         )
 
-    logger.info(f"Retrieved {len(jobs)} jobs.")
+        response.raise_for_status()
 
-    return jobs
+        data = response.json()
+
+        jobs: List[Job] = []
+
+        for item in data["jobs"]:
+
+            jobs.append(
+
+                Job(
+
+                    title=item.get("title", ""),
+
+                    company=item.get("company_name", ""),
+
+                    description=item.get("description", ""),
+
+                    url=item.get("url", ""),
+
+                    posted_at=item.get(
+                        "publication_date",
+                        ""
+                    ),
+
+                    salary=item.get(
+                        "salary",
+                        "Not specified"
+                    ),
+
+                    country=item.get(
+                        "candidate_required_location",
+                        "Worldwide"
+                    ),
+
+                    remote=True,
+
+                    source="Remotive",
+
+                )
+
+            )
+
+        logger.info(
+            f"Fetched {len(jobs)} Remotive jobs."
+        )
+
+        return jobs

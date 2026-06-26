@@ -47,3 +47,366 @@
 2026-06-25 21:39:11,026 | INFO | core.database | Saving: Staff Software Engineer, Product (Campinas)
 2026-06-25 21:39:11,029 | INFO | core.database | Saving: Data Labeling Specialists
 2026-06-25 21:39:11,032 | INFO | core.orchestrator | 32 new jobs saved.
+2026-06-25 22:02:00,024 | INFO | __main__ | Starting JobHunterAI
+2026-06-25 22:02:00,025 | INFO | core.orchestrator | Initializing JobOrchestrator...
+2026-06-25 22:02:00,027 | INFO | core.database | Initializing database...
+2026-06-25 22:02:00,031 | INFO | core.orchestrator | Starting job scan...
+2026-06-25 22:02:00,031 | INFO | scrapers.remotive | Fetching jobs from Remotive...
+2026-06-25 22:02:00,390 | INFO | scrapers.remotive | Retrieved 32 jobs.
+2026-06-25 22:02:00,392 | INFO | core.orchestrator | 32 jobs collected.
+2026-06-25 22:02:00,393 | INFO | core.orchestrator | ------------------------------------
+2026-06-25 22:02:00,393 | INFO | core.orchestrator | Jobs Collected : 32
+2026-06-25 22:02:00,394 | INFO | core.orchestrator | New Jobs       : 0
+2026-06-25 22:02:00,394 | INFO | core.orchestrator | Duplicates     : 32
+2026-06-25 22:02:00,394 | INFO | core.orchestrator | Rejected       : 0
+2026-06-25 22:02:00,394 | INFO | core.orchestrator | HOT Matches    : 0
+2026-06-25 22:02:00,394 | INFO | core.orchestrator | HIGH Matches   : 0
+2026-06-25 22:02:00,395 | INFO | core.orchestrator | GOOD Matches   : 0
+2026-06-25 22:02:00,395 | INFO | core.orchestrator | ------------------------------------
+2026-06-25 22:05:54,709 | INFO | __main__ | Starting JobHunterAI
+2026-06-25 22:05:54,709 | INFO | core.orchestrator | Initializing JobOrchestrator...
+2026-06-25 22:05:54,710 | INFO | core.database | Initializing database...
+2026-06-25 22:05:54,716 | INFO | core.orchestrator | Starting job scan...
+2026-06-25 22:05:54,717 | INFO | scrapers.remotive | Fetching jobs from Remotive...
+2026-06-25 22:05:54,961 | INFO | scrapers.remotive | Retrieved 32 jobs.
+2026-06-25 22:05:54,962 | INFO | core.orchestrator | 32 jobs collected.
+2026-06-25 22:05:54,963 | INFO | core.recruiter | REJECT | Staff Product Engineer (S�o Paulo)
+2026-06-25 22:05:54,963 | INFO | core.recruiter | REJECT | Senior Quality Engineer (Florian�polis)
+2026-06-25 22:05:54,963 | INFO | core.recruiter | REJECT | Senior Quality Engineer (S�o Paulo)
+2026-06-25 22:05:54,964 | INFO | core.recruiter | REJECT | Senior Quality Engineer (Belo Horizonte)
+2026-06-25 22:05:54,964 | INFO | core.recruiter | REJECT | Senior Quality Engineer (Campinas)
+2026-06-25 22:05:54,965 | INFO | core.recruiter | REJECT | Senior Quality Engineer (Porto Alegre)
+2026-06-25 22:05:54,968 | INFO | core.recruiter | REJECT | Mid/Senior AI Cinematic Video Editor
+2026-06-25 22:05:54,968 | INFO | core.recruiter | REJECT | Senior Independent AI Engineer / Architect
+2026-06-25 22:05:54,969 | INFO | core.recruiter | REJECT | Senior Independent Software Developer
+2026-06-25 22:05:54,969 | INFO | core.recruiter | REJECT | Frontend Developer
+2026-06-25 22:05:54,969 | INFO | core.recruiter | REJECT | Tech Lead Full-Stack Rails Engineer
+2026-06-25 22:05:54,970 | INFO | core.recruiter | REJECT | Assistant Account Payable
+2026-06-25 22:05:54,970 | INFO | core.recruiter | REJECT | Head of Engineering
+2026-06-25 22:05:54,970 | INFO | core.recruiter | REJECT | Office Assistant
+2026-06-25 22:05:54,971 | INFO | core.recruiter | REJECT | Quality Assurance Rater - German (Germany)
+2026-06-25 22:05:54,971 | INFO | core.recruiter | REJECT | Senior Data Scientist
+2026-06-25 22:05:54,972 | INFO | core.recruiter | REJECT | iOS Developer
+2026-06-25 22:05:54,972 | INFO | core.recruiter | REJECT | High-Ticket Financial Sales Specialist & Team Lead Track
+2026-06-25 22:05:54,972 | INFO | core.recruiter | REJECT | Inside Sales Contractor
+2026-06-25 22:05:54,974 | INFO | core.recruiter | Online Data Analyst Canada (French Language)  |  35 | LOW
+2026-06-25 22:05:54,975 | INFO | core.recruiter | Online Data Analyst United States Spanish spe |  15 | LOW
+2026-06-25 22:05:54,977 | INFO | core.recruiter | Online Data Analyst Canada                    |  35 | LOW
+2026-06-25 22:05:54,978 | INFO | core.recruiter | REJECT | Freelance Writer
+2026-06-25 22:05:54,978 | INFO | core.recruiter | REJECT | Head of Sales
+2026-06-25 22:05:54,979 | INFO | core.recruiter | REJECT | Copywriter
+2026-06-25 22:05:54,979 | INFO | core.recruiter | REJECT | Staff Software Engineer, Product (Belo Horizonte)
+2026-06-25 22:05:54,979 | INFO | core.recruiter | REJECT | Staff Software Engineer, Product (Florian�polis)
+2026-06-25 22:05:54,980 | INFO | core.recruiter | REJECT | Staff Software Engineer, Product (Porto Alegre)
+2026-06-25 22:05:54,980 | INFO | core.recruiter | REJECT | Staff Software Engineer, Product (S�o Paulo)
+2026-06-25 22:05:54,981 | INFO | core.recruiter | Customer Operations & Writing Specialist      |  10 | LOW
+2026-06-25 22:05:54,981 | INFO | core.recruiter | REJECT | Staff Software Engineer, Product (Campinas)
+2026-06-25 22:05:54,982 | INFO | core.recruiter | REJECT | Data Labeling Specialists
+2026-06-25 22:05:54,982 | INFO | core.orchestrator | ------------------------------------
+2026-06-25 22:05:54,982 | INFO | core.orchestrator | Jobs Collected : 32
+2026-06-25 22:05:54,982 | INFO | core.orchestrator | New Jobs       : 0
+2026-06-25 22:05:54,982 | INFO | core.orchestrator | Duplicates     : 0
+2026-06-25 22:05:54,982 | INFO | core.orchestrator | Rejected       : 32
+2026-06-25 22:05:54,983 | INFO | core.orchestrator | HOT Matches    : 0
+2026-06-25 22:05:54,983 | INFO | core.orchestrator | HIGH Matches   : 0
+2026-06-25 22:05:54,983 | INFO | core.orchestrator | GOOD Matches   : 0
+2026-06-25 22:05:54,983 | INFO | core.orchestrator | ------------------------------------
+2026-06-26 17:35:17,598 | INFO | __main__ | ==================================================
+2026-06-26 17:35:17,598 | INFO | __main__ | Starting JobHunterAI
+2026-06-26 17:35:17,598 | INFO | __main__ | ==================================================
+2026-06-26 17:35:17,599 | INFO | core.orchestrator | Initializing JobOrchestrator...
+2026-06-26 17:35:17,602 | INFO | core.database | Initializing database...
+2026-06-26 17:35:17,605 | INFO | core.scheduler | Scheduler started.
+2026-06-26 17:35:17,605 | INFO | core.scheduler | Running scheduled scan...
+2026-06-26 17:35:17,606 | INFO | core.orchestrator | Starting job scan...
+2026-06-26 17:35:17,606 | INFO | scrapers.remotive | Fetching jobs from Remotive...
+2026-06-26 17:35:18,024 | INFO | scrapers.remotive | Fetched 34 Remotive jobs.
+2026-06-26 17:35:18,026 | INFO | core.orchestrator | Collected 34 jobs.
+2026-06-26 17:35:18,027 | INFO | core.recruiter | Rejected: Mid/Senior AI Cinematic Video Editor
+2026-06-26 17:35:18,028 | INFO | core.recruiter | Rejected: Senior Product Manager
+2026-06-26 17:35:18,028 | INFO | core.recruiter | Rejected: Staff Product Engineer (São Paulo)
+2026-06-26 17:35:18,029 | INFO | core.recruiter | Rejected: Senior Quality Engineer (Florianópolis)
+2026-06-26 17:35:18,030 | INFO | core.recruiter | Rejected: Senior Quality Engineer (São Paulo)
+2026-06-26 17:35:18,030 | INFO | core.recruiter | Rejected: Senior Quality Engineer (Belo Horizonte)
+2026-06-26 17:35:18,030 | INFO | core.recruiter | Rejected: Senior Quality Engineer (Campinas)
+2026-06-26 17:35:18,031 | INFO | core.recruiter | Rejected: Senior Quality Engineer (Porto Alegre)
+2026-06-26 17:35:18,031 | INFO | core.recruiter | Rejected: Mid/Senior AI Cinematic Video Editor
+2026-06-26 17:35:18,032 | INFO | core.recruiter | Rejected: Senior Independent AI Engineer / Architect
+2026-06-26 17:35:18,032 | INFO | core.recruiter | Rejected: Senior Independent Software Developer
+2026-06-26 17:35:18,032 | INFO | core.recruiter | Rejected: Frontend Developer
+2026-06-26 17:35:18,032 | INFO | core.recruiter | Rejected: Tech Lead Full-Stack Rails Engineer
+2026-06-26 17:35:18,033 | INFO | core.recruiter | Rejected: Assistant Account Payable
+2026-06-26 17:35:18,033 | INFO | core.recruiter | Rejected: Head of Engineering
+2026-06-26 17:35:18,033 | INFO | core.recruiter | Rejected: Office Assistant
+2026-06-26 17:35:18,034 | INFO | core.recruiter | Rejected: Quality Assurance Rater - German (Germany)
+2026-06-26 17:35:18,034 | INFO | core.recruiter | Rejected: Senior Data Scientist
+2026-06-26 17:35:18,035 | INFO | core.recruiter | Rejected: iOS Developer
+2026-06-26 17:35:18,036 | INFO | core.recruiter | Rejected: High-Ticket Financial Sales Specialist & Team Lead Track
+2026-06-26 17:35:18,037 | INFO | core.recruiter | Rejected: Inside Sales Contractor
+2026-06-26 17:35:18,039 | INFO | core.recruiter | Online Data Analyst Canada (French Language)  |  40 | LOW
+2026-06-26 17:35:18,040 | INFO | core.recruiter | Online Data Analyst United States Spanish spe |  20 | LOW
+2026-06-26 17:35:18,042 | INFO | core.recruiter | Online Data Analyst Canada                    |  40 | LOW
+2026-06-26 17:35:18,042 | INFO | core.recruiter | Rejected: Freelance Writer
+2026-06-26 17:35:18,043 | INFO | core.recruiter | Rejected: Head of Sales
+2026-06-26 17:35:18,043 | INFO | core.recruiter | Rejected: Copywriter
+2026-06-26 17:35:18,043 | INFO | core.recruiter | Rejected: Staff Software Engineer, Product (Belo Horizonte)
+2026-06-26 17:35:18,044 | INFO | core.recruiter | Rejected: Staff Software Engineer, Product (Florianópolis)
+2026-06-26 17:35:18,044 | INFO | core.recruiter | Rejected: Staff Software Engineer, Product (Porto Alegre)
+2026-06-26 17:35:18,044 | INFO | core.recruiter | Rejected: Staff Software Engineer, Product (São Paulo)
+2026-06-26 17:35:18,045 | INFO | core.recruiter | Customer Operations & Writing Specialist      |  10 | LOW
+2026-06-26 17:35:18,045 | INFO | core.recruiter | Rejected: Staff Software Engineer, Product (Campinas)
+2026-06-26 17:35:18,045 | INFO | core.recruiter | Rejected: Data Labeling Specialists
+2026-06-26 17:35:18,045 | INFO | core.orchestrator | =======================================
+2026-06-26 17:35:18,045 | INFO | core.orchestrator | Scan Complete
+2026-06-26 17:35:18,045 | INFO | core.orchestrator | ---------------------------------------
+2026-06-26 17:35:18,046 | INFO | core.orchestrator | Collected  : 34
+2026-06-26 17:35:18,046 | INFO | core.orchestrator | Accepted   : 0
+2026-06-26 17:35:18,046 | INFO | core.orchestrator | Rejected   : 34
+2026-06-26 17:35:18,046 | INFO | core.orchestrator | Duplicates : 0
+2026-06-26 17:35:18,046 | INFO | core.orchestrator | ---------------------------------------
+2026-06-26 17:35:18,046 | INFO | core.orchestrator | HOT  : 0
+2026-06-26 17:35:18,046 | INFO | core.orchestrator | HIGH : 0
+2026-06-26 17:35:18,046 | INFO | core.orchestrator | GOOD : 0
+2026-06-26 17:35:18,046 | INFO | core.orchestrator | =======================================
+2026-06-26 17:50:00,778 | INFO | __main__ | ==================================================
+2026-06-26 17:50:00,778 | INFO | __main__ | Starting JobHunterAI
+2026-06-26 17:50:00,778 | INFO | __main__ | ==================================================
+2026-06-26 17:50:00,778 | INFO | core.orchestrator | Initializing JobHunterAI...
+2026-06-26 17:50:00,780 | INFO | core.database | Initializing database...
+2026-06-26 17:50:00,780 | INFO | core.scheduler | Scheduler started.
+2026-06-26 17:50:00,780 | INFO | core.scheduler | Running scheduled scan...
+2026-06-26 17:50:00,781 | INFO | core.orchestrator | ======================================
+2026-06-26 17:50:00,781 | INFO | core.orchestrator | Starting job scan...
+2026-06-26 17:50:00,781 | INFO | core.orchestrator | ======================================
+2026-06-26 17:50:00,781 | INFO | core.orchestrator | Running RemotiveScraper
+2026-06-26 17:50:00,781 | INFO | scrapers.remotive | Fetching jobs from Remotive...
+2026-06-26 17:50:01,025 | INFO | scrapers.remotive | Fetched 34 Remotive jobs.
+2026-06-26 17:50:01,026 | INFO | core.orchestrator | Collected 34 jobs.
+2026-06-26 17:50:01,027 | INFO | core.recruiter | Rejected: Mid/Senior AI Cinematic Video Editor
+2026-06-26 17:50:01,027 | INFO | core.recruiter | Rejected: Senior Product Manager
+2026-06-26 17:50:01,027 | INFO | core.recruiter | Rejected: Staff Product Engineer (São Paulo)
+2026-06-26 17:50:01,027 | INFO | core.recruiter | Rejected: Senior Quality Engineer (Florianópolis)
+2026-06-26 17:50:01,027 | INFO | core.recruiter | Rejected: Senior Quality Engineer (São Paulo)
+2026-06-26 17:50:01,028 | INFO | core.recruiter | Rejected: Senior Quality Engineer (Belo Horizonte)
+2026-06-26 17:50:01,028 | INFO | core.recruiter | Rejected: Senior Quality Engineer (Campinas)
+2026-06-26 17:50:01,028 | INFO | core.recruiter | Rejected: Senior Quality Engineer (Porto Alegre)
+2026-06-26 17:50:01,028 | INFO | core.recruiter | Rejected: Mid/Senior AI Cinematic Video Editor
+2026-06-26 17:50:01,029 | INFO | core.recruiter | Rejected: Senior Independent AI Engineer / Architect
+2026-06-26 17:50:01,029 | INFO | core.recruiter | Rejected: Senior Independent Software Developer
+2026-06-26 17:50:01,029 | INFO | core.recruiter | Rejected: Frontend Developer
+2026-06-26 17:50:01,030 | INFO | core.recruiter | Rejected: Tech Lead Full-Stack Rails Engineer
+2026-06-26 17:50:01,030 | INFO | core.recruiter | Rejected: Assistant Account Payable
+2026-06-26 17:50:01,030 | INFO | core.recruiter | Rejected: Head of Engineering
+2026-06-26 17:50:01,030 | INFO | core.recruiter | Rejected: Office Assistant
+2026-06-26 17:50:01,031 | INFO | core.recruiter | Rejected: Quality Assurance Rater - German (Germany)
+2026-06-26 17:50:01,032 | INFO | core.recruiter | Rejected: Senior Data Scientist
+2026-06-26 17:50:01,032 | INFO | core.recruiter | Rejected: iOS Developer
+2026-06-26 17:50:01,032 | INFO | core.recruiter | Rejected: High-Ticket Financial Sales Specialist & Team Lead Track
+2026-06-26 17:50:01,033 | INFO | core.recruiter | Rejected: Inside Sales Contractor
+2026-06-26 17:50:01,035 | INFO | core.recruiter | Online Data Analyst Canada (French Language) |  25 | LOW
+2026-06-26 17:50:01,035 | INFO | core.recruiter | Online Data Analyst United States Spanish spe|  25 | LOW
+2026-06-26 17:50:01,037 | INFO | core.recruiter | Online Data Analyst Canada                   |  25 | LOW
+2026-06-26 17:50:01,037 | INFO | core.recruiter | Rejected: Freelance Writer
+2026-06-26 17:50:01,038 | INFO | core.recruiter | Rejected: Head of Sales
+2026-06-26 17:50:01,038 | INFO | core.recruiter | Rejected: Copywriter
+2026-06-26 17:50:01,039 | INFO | core.recruiter | Rejected: Staff Software Engineer, Product (Belo Horizonte)
+2026-06-26 17:50:01,039 | INFO | core.recruiter | Rejected: Staff Software Engineer, Product (Florianópolis)
+2026-06-26 17:50:01,039 | INFO | core.recruiter | Rejected: Staff Software Engineer, Product (Porto Alegre)
+2026-06-26 17:50:01,040 | INFO | core.recruiter | Rejected: Staff Software Engineer, Product (São Paulo)
+2026-06-26 17:50:01,040 | INFO | core.recruiter | Customer Operations & Writing Specialist     |  15 | LOW
+2026-06-26 17:50:01,041 | INFO | core.recruiter | Rejected: Staff Software Engineer, Product (Campinas)
+2026-06-26 17:50:01,041 | INFO | core.recruiter | Data Labeling Specialists                    |  25 | LOW
+2026-06-26 17:50:01,042 | INFO | core.orchestrator | ======================================
+2026-06-26 17:50:01,042 | INFO | core.orchestrator | SCAN COMPLETE
+2026-06-26 17:50:01,042 | INFO | core.orchestrator | --------------------------------------
+2026-06-26 17:50:01,042 | INFO | core.orchestrator | Collected      : 34
+2026-06-26 17:50:01,042 | INFO | core.orchestrator | Accepted       : 0
+2026-06-26 17:50:01,043 | INFO | core.orchestrator | Rejected       : 34
+2026-06-26 17:50:01,043 | INFO | core.orchestrator | Duplicates     : 0
+2026-06-26 17:50:01,043 | INFO | core.orchestrator | --------------------------------------
+2026-06-26 17:50:01,043 | INFO | core.orchestrator | HOT Matches    : 0
+2026-06-26 17:50:01,043 | INFO | core.orchestrator | HIGH Matches   : 0
+2026-06-26 17:50:01,043 | INFO | core.orchestrator | GOOD Matches   : 0
+2026-06-26 17:50:01,044 | INFO | core.orchestrator | ======================================
+2026-06-26 18:50:01,333 | INFO | core.scheduler | Running scheduled scan...
+2026-06-26 18:50:01,362 | INFO | core.orchestrator | ======================================
+2026-06-26 18:50:01,363 | INFO | core.orchestrator | Starting job scan...
+2026-06-26 18:50:01,363 | INFO | core.orchestrator | ======================================
+2026-06-26 18:50:01,365 | INFO | core.orchestrator | Running RemotiveScraper
+2026-06-26 18:50:01,366 | INFO | scrapers.remotive | Fetching jobs from Remotive...
+2026-06-26 18:50:01,876 | INFO | scrapers.remotive | Fetched 34 Remotive jobs.
+2026-06-26 18:50:01,880 | INFO | core.orchestrator | Collected 34 jobs.
+2026-06-26 18:50:01,887 | INFO | core.recruiter | Rejected: Mid/Senior AI Cinematic Video Editor
+2026-06-26 18:50:01,890 | INFO | core.recruiter | Rejected: Senior Product Manager
+2026-06-26 18:50:01,893 | INFO | core.recruiter | Rejected: Staff Product Engineer (São Paulo)
+2026-06-26 18:50:01,895 | INFO | core.recruiter | Rejected: Senior Quality Engineer (Florianópolis)
+2026-06-26 18:50:01,896 | INFO | core.recruiter | Rejected: Senior Quality Engineer (São Paulo)
+2026-06-26 18:50:01,897 | INFO | core.recruiter | Rejected: Senior Quality Engineer (Belo Horizonte)
+2026-06-26 18:50:01,899 | INFO | core.recruiter | Rejected: Senior Quality Engineer (Campinas)
+2026-06-26 18:50:01,900 | INFO | core.recruiter | Rejected: Senior Quality Engineer (Porto Alegre)
+2026-06-26 18:50:01,902 | INFO | core.recruiter | Rejected: Mid/Senior AI Cinematic Video Editor
+2026-06-26 18:50:01,902 | INFO | core.recruiter | Rejected: Senior Independent AI Engineer / Architect
+2026-06-26 18:50:01,904 | INFO | core.recruiter | Rejected: Senior Independent Software Developer
+2026-06-26 18:50:01,904 | INFO | core.recruiter | Rejected: Frontend Developer
+2026-06-26 18:50:01,908 | INFO | core.recruiter | Rejected: Tech Lead Full-Stack Rails Engineer
+2026-06-26 18:50:01,908 | INFO | core.recruiter | Rejected: Assistant Account Payable
+2026-06-26 18:50:01,909 | INFO | core.recruiter | Rejected: Head of Engineering
+2026-06-26 18:50:01,910 | INFO | core.recruiter | Rejected: Office Assistant
+2026-06-26 18:50:01,913 | INFO | core.recruiter | Rejected: Quality Assurance Rater - German (Germany)
+2026-06-26 18:50:01,914 | INFO | core.recruiter | Rejected: Senior Data Scientist
+2026-06-26 18:50:01,916 | INFO | core.recruiter | Rejected: iOS Developer
+2026-06-26 18:50:01,917 | INFO | core.recruiter | Rejected: High-Ticket Financial Sales Specialist & Team Lead Track
+2026-06-26 18:50:01,919 | INFO | core.recruiter | Rejected: Inside Sales Contractor
+2026-06-26 18:50:01,923 | INFO | core.recruiter | Online Data Analyst Canada (French Language) |  25 | LOW
+2026-06-26 18:50:01,924 | INFO | core.recruiter | Online Data Analyst United States Spanish spe|  25 | LOW
+2026-06-26 18:50:01,928 | INFO | core.recruiter | Online Data Analyst Canada                   |  25 | LOW
+2026-06-26 18:50:01,929 | INFO | core.recruiter | Rejected: Freelance Writer
+2026-06-26 18:50:01,931 | INFO | core.recruiter | Rejected: Head of Sales
+2026-06-26 18:50:01,932 | INFO | core.recruiter | Rejected: Copywriter
+2026-06-26 18:50:01,933 | INFO | core.recruiter | Rejected: Staff Software Engineer, Product (Belo Horizonte)
+2026-06-26 18:50:01,934 | INFO | core.recruiter | Rejected: Staff Software Engineer, Product (Florianópolis)
+2026-06-26 18:50:01,934 | INFO | core.recruiter | Rejected: Staff Software Engineer, Product (Porto Alegre)
+2026-06-26 18:50:01,935 | INFO | core.recruiter | Rejected: Staff Software Engineer, Product (São Paulo)
+2026-06-26 18:50:01,936 | INFO | core.recruiter | Customer Operations & Writing Specialist     |  15 | LOW
+2026-06-26 18:50:01,937 | INFO | core.recruiter | Rejected: Staff Software Engineer, Product (Campinas)
+2026-06-26 18:50:01,938 | INFO | core.recruiter | Data Labeling Specialists                    |  25 | LOW
+2026-06-26 18:50:01,939 | INFO | core.orchestrator | ======================================
+2026-06-26 18:50:01,939 | INFO | core.orchestrator | SCAN COMPLETE
+2026-06-26 18:50:01,941 | INFO | core.orchestrator | --------------------------------------
+2026-06-26 18:50:01,941 | INFO | core.orchestrator | Collected      : 34
+2026-06-26 18:50:01,942 | INFO | core.orchestrator | Accepted       : 0
+2026-06-26 18:50:01,943 | INFO | core.orchestrator | Rejected       : 34
+2026-06-26 18:50:01,943 | INFO | core.orchestrator | Duplicates     : 0
+2026-06-26 18:50:01,944 | INFO | core.orchestrator | --------------------------------------
+2026-06-26 18:50:01,946 | INFO | core.orchestrator | HOT Matches    : 0
+2026-06-26 18:50:01,946 | INFO | core.orchestrator | HIGH Matches   : 0
+2026-06-26 18:50:01,947 | INFO | core.orchestrator | GOOD Matches   : 0
+2026-06-26 18:50:01,947 | INFO | core.orchestrator | ======================================
+2026-06-26 19:50:03,211 | INFO | core.scheduler | Running scheduled scan...
+2026-06-26 19:50:03,218 | INFO | core.orchestrator | ======================================
+2026-06-26 19:50:03,219 | INFO | core.orchestrator | Starting job scan...
+2026-06-26 19:50:03,219 | INFO | core.orchestrator | ======================================
+2026-06-26 19:50:03,219 | INFO | core.orchestrator | Running RemotiveScraper
+2026-06-26 19:50:03,220 | INFO | scrapers.remotive | Fetching jobs from Remotive...
+2026-06-26 19:50:04,004 | INFO | scrapers.remotive | Fetched 34 Remotive jobs.
+2026-06-26 19:50:04,007 | INFO | core.orchestrator | Collected 34 jobs.
+2026-06-26 19:50:04,013 | INFO | core.recruiter | Rejected: Mid/Senior AI Cinematic Video Editor
+2026-06-26 19:50:04,014 | INFO | core.recruiter | Rejected: Senior Product Manager
+2026-06-26 19:50:04,014 | INFO | core.recruiter | Rejected: Staff Product Engineer (São Paulo)
+2026-06-26 19:50:04,016 | INFO | core.recruiter | Rejected: Senior Quality Engineer (Florianópolis)
+2026-06-26 19:50:04,016 | INFO | core.recruiter | Rejected: Senior Quality Engineer (São Paulo)
+2026-06-26 19:50:04,017 | INFO | core.recruiter | Rejected: Senior Quality Engineer (Belo Horizonte)
+2026-06-26 19:50:04,018 | INFO | core.recruiter | Rejected: Senior Quality Engineer (Campinas)
+2026-06-26 19:50:04,018 | INFO | core.recruiter | Rejected: Senior Quality Engineer (Porto Alegre)
+2026-06-26 19:50:04,019 | INFO | core.recruiter | Rejected: Mid/Senior AI Cinematic Video Editor
+2026-06-26 19:50:04,019 | INFO | core.recruiter | Rejected: Senior Independent AI Engineer / Architect
+2026-06-26 19:50:04,020 | INFO | core.recruiter | Rejected: Senior Independent Software Developer
+2026-06-26 19:50:04,021 | INFO | core.recruiter | Rejected: Frontend Developer
+2026-06-26 19:50:04,023 | INFO | core.recruiter | Rejected: Tech Lead Full-Stack Rails Engineer
+2026-06-26 19:50:04,023 | INFO | core.recruiter | Rejected: Assistant Account Payable
+2026-06-26 19:50:04,024 | INFO | core.recruiter | Rejected: Head of Engineering
+2026-06-26 19:50:04,025 | INFO | core.recruiter | Rejected: Office Assistant
+2026-06-26 19:50:04,027 | INFO | core.recruiter | Rejected: Quality Assurance Rater - German (Germany)
+2026-06-26 19:50:04,028 | INFO | core.recruiter | Rejected: Senior Data Scientist
+2026-06-26 19:50:04,029 | INFO | core.recruiter | Rejected: iOS Developer
+2026-06-26 19:50:04,029 | INFO | core.recruiter | Rejected: High-Ticket Financial Sales Specialist & Team Lead Track
+2026-06-26 19:50:04,031 | INFO | core.recruiter | Rejected: Inside Sales Contractor
+2026-06-26 19:50:04,035 | INFO | core.recruiter | Online Data Analyst Canada (French Language) |  25 | LOW
+2026-06-26 19:50:04,037 | INFO | core.recruiter | Online Data Analyst United States Spanish spe|  25 | LOW
+2026-06-26 19:50:04,040 | INFO | core.recruiter | Online Data Analyst Canada                   |  25 | LOW
+2026-06-26 19:50:04,041 | INFO | core.recruiter | Rejected: Freelance Writer
+2026-06-26 19:50:04,043 | INFO | core.recruiter | Rejected: Head of Sales
+2026-06-26 19:50:04,043 | INFO | core.recruiter | Rejected: Copywriter
+2026-06-26 19:50:04,044 | INFO | core.recruiter | Rejected: Staff Software Engineer, Product (Belo Horizonte)
+2026-06-26 19:50:04,045 | INFO | core.recruiter | Rejected: Staff Software Engineer, Product (Florianópolis)
+2026-06-26 19:50:04,046 | INFO | core.recruiter | Rejected: Staff Software Engineer, Product (Porto Alegre)
+2026-06-26 19:50:04,047 | INFO | core.recruiter | Rejected: Staff Software Engineer, Product (São Paulo)
+2026-06-26 19:50:04,048 | INFO | core.recruiter | Customer Operations & Writing Specialist     |  15 | LOW
+2026-06-26 19:50:04,048 | INFO | core.recruiter | Rejected: Staff Software Engineer, Product (Campinas)
+2026-06-26 19:50:04,049 | INFO | core.recruiter | Data Labeling Specialists                    |  25 | LOW
+2026-06-26 19:50:04,050 | INFO | core.orchestrator | ======================================
+2026-06-26 19:50:04,050 | INFO | core.orchestrator | SCAN COMPLETE
+2026-06-26 19:50:04,050 | INFO | core.orchestrator | --------------------------------------
+2026-06-26 19:50:04,050 | INFO | core.orchestrator | Collected      : 34
+2026-06-26 19:50:04,051 | INFO | core.orchestrator | Accepted       : 0
+2026-06-26 19:50:04,051 | INFO | core.orchestrator | Rejected       : 34
+2026-06-26 19:50:04,051 | INFO | core.orchestrator | Duplicates     : 0
+2026-06-26 19:50:04,052 | INFO | core.orchestrator | --------------------------------------
+2026-06-26 19:50:04,052 | INFO | core.orchestrator | HOT Matches    : 0
+2026-06-26 19:50:04,053 | INFO | core.orchestrator | HIGH Matches   : 0
+2026-06-26 19:50:04,054 | INFO | core.orchestrator | GOOD Matches   : 0
+2026-06-26 19:50:04,054 | INFO | core.orchestrator | ======================================
+2026-06-26 20:40:53,888 | INFO | __main__ | ==================================================
+2026-06-26 20:40:53,888 | INFO | __main__ | Starting JobHunterAI
+2026-06-26 20:40:53,888 | INFO | __main__ | ==================================================
+2026-06-26 20:40:53,888 | INFO | core.orchestrator | Initializing JobHunterAI...
+2026-06-26 20:40:53,889 | INFO | core.database | Initializing database...
+2026-06-26 20:40:53,890 | INFO | core.scheduler | Scheduler started.
+2026-06-26 20:40:53,890 | INFO | core.scheduler | Running scheduled scan...
+2026-06-26 20:40:53,890 | INFO | core.orchestrator | ======================================
+2026-06-26 20:40:53,891 | INFO | core.orchestrator | Starting job scan...
+2026-06-26 20:40:53,891 | INFO | core.orchestrator | ======================================
+2026-06-26 20:40:53,891 | INFO | core.orchestrator | Running RemotiveScraper
+2026-06-26 20:40:53,891 | INFO | scrapers.remotive | Fetching jobs from Remotive...
+2026-06-26 20:40:54,201 | INFO | scrapers.remotive | Fetched 34 Remotive jobs.
+2026-06-26 20:40:54,202 | INFO | core.orchestrator | Collected 34 jobs.
+2026-06-26 20:41:43,037 | INFO | __main__ | ==================================================
+2026-06-26 20:41:43,037 | INFO | __main__ | Starting JobHunterAI
+2026-06-26 20:41:43,038 | INFO | __main__ | ==================================================
+2026-06-26 20:41:43,038 | INFO | core.orchestrator | Initializing JobHunterAI...
+2026-06-26 20:41:43,039 | INFO | core.database | Initializing database...
+2026-06-26 20:41:43,044 | INFO | core.scheduler | Scheduler started.
+2026-06-26 20:41:43,044 | INFO | core.scheduler | Running scheduled scan...
+2026-06-26 20:41:43,044 | INFO | core.orchestrator | ======================================
+2026-06-26 20:41:43,044 | INFO | core.orchestrator | Starting job scan...
+2026-06-26 20:41:43,044 | INFO | core.orchestrator | ======================================
+2026-06-26 20:41:43,044 | INFO | core.orchestrator | Running RemotiveScraper
+2026-06-26 20:41:43,045 | INFO | scrapers.remotive | Fetching jobs from Remotive...
+2026-06-26 20:41:43,234 | INFO | scrapers.remotive | Fetched 34 Remotive jobs.
+2026-06-26 20:41:43,236 | INFO | core.orchestrator | Collected 34 jobs.
+2026-06-26 20:41:43,236 | INFO | core.recruiter | Rejected: Mid/Senior AI Cinematic Video Editor
+2026-06-26 20:41:43,237 | INFO | core.recruiter | Rejected: Senior Product Manager
+2026-06-26 20:41:43,237 | INFO | core.recruiter | Rejected: Staff Product Engineer (São Paulo)
+2026-06-26 20:41:43,237 | INFO | core.recruiter | Rejected: Senior Quality Engineer (Florianópolis)
+2026-06-26 20:41:43,238 | INFO | core.recruiter | Rejected: Senior Quality Engineer (São Paulo)
+2026-06-26 20:41:43,238 | INFO | core.recruiter | Rejected: Senior Quality Engineer (Belo Horizonte)
+2026-06-26 20:41:43,238 | INFO | core.recruiter | Rejected: Senior Quality Engineer (Campinas)
+2026-06-26 20:41:43,239 | INFO | core.recruiter | Rejected: Senior Quality Engineer (Porto Alegre)
+2026-06-26 20:41:43,239 | INFO | core.recruiter | Rejected: Mid/Senior AI Cinematic Video Editor
+2026-06-26 20:41:43,240 | INFO | core.recruiter | Rejected: Senior Independent AI Engineer / Architect
+2026-06-26 20:41:43,240 | INFO | core.recruiter | Rejected: Senior Independent Software Developer
+2026-06-26 20:41:43,240 | INFO | core.recruiter | Rejected: Frontend Developer
+2026-06-26 20:41:43,241 | INFO | core.recruiter | Rejected: Tech Lead Full-Stack Rails Engineer
+2026-06-26 20:41:43,241 | INFO | core.recruiter | Rejected: Assistant Account Payable
+2026-06-26 20:41:43,241 | INFO | core.recruiter | Rejected: Head of Engineering
+2026-06-26 20:41:43,241 | INFO | core.recruiter | Rejected: Office Assistant
+2026-06-26 20:41:43,242 | INFO | core.recruiter | Rejected: Quality Assurance Rater - German (Germany)
+2026-06-26 20:41:43,242 | INFO | core.recruiter | Rejected: Senior Data Scientist
+2026-06-26 20:41:43,243 | INFO | core.recruiter | Rejected: iOS Developer
+2026-06-26 20:41:43,243 | INFO | core.recruiter | Rejected: High-Ticket Financial Sales Specialist & Team Lead Track
+2026-06-26 20:41:43,244 | INFO | core.recruiter | Rejected: Inside Sales Contractor
+2026-06-26 20:41:43,246 | INFO | core.recruiter | Online Data Analyst Canada (French Language) |  25 | LOW
+2026-06-26 20:41:43,246 | INFO | core.recruiter | Online Data Analyst United States Spanish spe|  25 | LOW
+2026-06-26 20:41:43,248 | INFO | core.recruiter | Online Data Analyst Canada                   |  25 | LOW
+2026-06-26 20:41:43,248 | INFO | core.recruiter | Rejected: Freelance Writer
+2026-06-26 20:41:43,250 | INFO | core.recruiter | Rejected: Head of Sales
+2026-06-26 20:41:43,250 | INFO | core.recruiter | Rejected: Copywriter
+2026-06-26 20:41:43,251 | INFO | core.recruiter | Rejected: Staff Software Engineer, Product (Belo Horizonte)
+2026-06-26 20:41:43,251 | INFO | core.recruiter | Rejected: Staff Software Engineer, Product (Florianópolis)
+2026-06-26 20:41:43,251 | INFO | core.recruiter | Rejected: Staff Software Engineer, Product (Porto Alegre)
+2026-06-26 20:41:43,252 | INFO | core.recruiter | Rejected: Staff Software Engineer, Product (São Paulo)
+2026-06-26 20:41:43,252 | INFO | core.recruiter | Customer Operations & Writing Specialist     |  15 | LOW
+2026-06-26 20:41:43,253 | INFO | core.recruiter | Rejected: Staff Software Engineer, Product (Campinas)
+2026-06-26 20:41:43,253 | INFO | core.recruiter | Data Labeling Specialists                    |  25 | LOW
+2026-06-26 20:41:43,253 | INFO | core.orchestrator | ======================================
+2026-06-26 20:41:43,253 | INFO | core.orchestrator | SCAN COMPLETE
+2026-06-26 20:41:43,253 | INFO | core.orchestrator | --------------------------------------
+2026-06-26 20:41:43,254 | INFO | core.orchestrator | Collected      : 34
+2026-06-26 20:41:43,254 | INFO | core.orchestrator | Accepted       : 0
+2026-06-26 20:41:43,254 | INFO | core.orchestrator | Rejected       : 34
+2026-06-26 20:41:43,254 | INFO | core.orchestrator | Duplicates     : 0
+2026-06-26 20:41:43,254 | INFO | core.orchestrator | --------------------------------------
+2026-06-26 20:41:43,254 | INFO | core.orchestrator | HOT Matches    : 0
+2026-06-26 20:41:43,255 | INFO | core.orchestrator | HIGH Matches   : 0
+2026-06-26 20:41:43,255 | INFO | core.orchestrator | GOOD Matches   : 0
+2026-06-26 20:41:43,255 | INFO | core.orchestrator | ======================================

@@ -1,20 +1,24 @@
 """
 JobHunterAI
+
+Application entry point.
 """
 
 from core.logger import get_logger
-from core.orchestrator import JobOrchestrator
+from core.scheduler import Scheduler
 
 logger = get_logger(__name__)
 
 
 def main():
 
+    logger.info("=" * 50)
     logger.info("Starting JobHunterAI")
+    logger.info("=" * 50)
 
-    orchestrator = JobOrchestrator()
+    scheduler = Scheduler()
 
-    orchestrator.run()
+    scheduler.start()
 
 
 if __name__ == "__main__":

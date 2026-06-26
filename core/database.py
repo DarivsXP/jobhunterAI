@@ -1,21 +1,19 @@
 """
-JobHunterAI Database Repository
+Database Repository
 """
 
 from pathlib import Path
 import sqlite3
-from typing import Optional
 
 from core.logger import get_logger
 from core.models import Job
+from core.schema import JOBS_TABLE
+from core.migrations import MigrationManager
 
 logger = get_logger(__name__)
 
 
 class JobRepository:
-    """
-    Handles all database operations.
-    """
 
     def __init__(self):
 
@@ -32,41 +30,26 @@ class JobRepository:
 
         self.create_tables()
 
+        MigrationManager(
+            self.connection
+        ).migrate()
+
     def create_tables(self):
 
-        logger.info("Initializing database...")
+        logger.info("Creating database tables...")
 
-        self.cursor.execute("""
-        CREATE TABLE IF NOT EXISTS jobs(
-
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-
-            title TEXT NOT NULL,
-
-            company TEXT,
-
-            source TEXT,
-
-            url TEXT UNIQUE,
-
-            score INTEGER DEFAULT 0,
-
-            posted_at TEXT,
-
-            description TEXT,
-
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-
-        )
-        """)
+        self.cursor.execute(JOBS_TABLE)
 
         self.connection.commit()
 
-    def exists(self, url: str) -> bool:
+    def exists(self, fingerprint: str) -> bool:
 
         self.cursor.execute(
-            "SELECT id FROM jobs WHERE url=?",
-            (url,),
+
+            "SELECT id FROM jobs WHERE fingerprint=?",
+
+            (fingerprint,)
+
         )
 
         return self.cursor.fetchone() is not None
@@ -78,16 +61,15 @@ class JobRepository:
         self.cursor.execute(
             """
             INSERT OR IGNORE INTO jobs(
-
-                title,
-                company,
-                source,
-                url,
-                score,
-                posted_at,
-                description
-
-            )
+                job.title,
+                job.company,
+                job.source,
+                job.url,
+                job.fingerprint,
+                job.score,
+                job.posted_at,
+                job.description
+                )
             VALUES(?,?,?,?,?,?,?)
             """,
             (
@@ -103,40 +85,6 @@ class JobRepository:
 
         self.connection.commit()
 
-    def find(self, job_id: int) -> Optional[sqlite3.Row]:
-
-        self.cursor.execute(
-            "SELECT * FROM jobs WHERE id=?",
-            (job_id,),
-        )
-
-        return self.cursor.fetchone()
-
-    def today(self):
-
-        self.cursor.execute("""
-        SELECT *
-        FROM jobs
-        WHERE DATE(created_at)=DATE('now')
-        ORDER BY score DESC
-        """)
-
-        return self.cursor.fetchall()
-
-    def top_matches(self, minimum_score: int = 80):
-
-        self.cursor.execute(
-            """
-            SELECT *
-            FROM jobs
-            WHERE score >= ?
-            ORDER BY score DESC
-            """,
-            (minimum_score,),
-        )
-
-        return self.cursor.fetchall()
-
     def count(self) -> int:
 
         self.cursor.execute(
@@ -145,8 +93,16 @@ class JobRepository:
 
         return self.cursor.fetchone()[0]
 
-    def close(self):
+    def today(self):
 
-        logger.info("Closing database connection.")
+        self.cursor.execute("""
+        SELECT *
+        FROM jobs
+        ORDER BY score DESC
+        """)
+
+        return self.cursor.fetchall()
+
+    def close(self):
 
         self.connection.close()
