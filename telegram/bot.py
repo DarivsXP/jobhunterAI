@@ -1,115 +1,65 @@
 """
-Telegram Service
+Telegram notification client.
 """
 
-import os
+from __future__ import annotations
 
 import requests
 
-from dotenv import load_dotenv
-
+from config.settings import settings
 from core.logger import get_logger
 from core.models import Job
-
-load_dotenv()
+from telegram.formatter import format_digest, format_job_message
 
 logger = get_logger(__name__)
 
 
 class TelegramBot:
+    def __init__(self) -> None:
+        self.token = settings.telegram_token
+        self.chat_id = settings.telegram_chat_id
 
-    def __init__(self):
+    @property
+    def is_enabled(self) -> bool:
+        return bool(self.token and self.chat_id)
 
-        self.token = os.getenv("BOT_TOKEN")
+    @property
+    def base_url(self) -> str:
+        return f"https://api.telegram.org/bot{self.token}"
 
-        self.chat_id = os.getenv("CHAT_ID")
-
-        self.base_url = (
-            f"https://api.telegram.org/bot{self.token}"
-        )
-
-    def send(self, message: str):
+    def send(self, message: str) -> bool:
+        if not self.is_enabled:
+            logger.info("Telegram disabled. Skipping notification send.")
+            return False
 
         try:
-
             response = requests.post(
-
                 f"{self.base_url}/sendMessage",
-
                 json={
-
                     "chat_id": self.chat_id,
-
                     "text": message,
-
-                    "parse_mode": "Markdown",
-
+                    "parse_mode": "MarkdownV2",
                     "disable_web_page_preview": True,
-
                 },
-
                 timeout=30,
-
             )
-
             response.raise_for_status()
+            logger.info("Telegram message sent.")
+            return True
 
-            logger.info(
-                "Telegram message sent."
-            )
+        except Exception:
+            logger.exception("Telegram send failed.")
+            return False
 
-        except Exception as error:
+    def send_hot_match(self, job: Job) -> bool:
+        return self.send(format_job_message(job))
 
-            logger.exception(error)
+    def send_high_match(self, job: Job) -> bool:
+        return self.send(format_job_message(job))
 
-    def send_hot_match(self, job: Job):
+    def send_digest(self, jobs: list[Job]) -> bool:
+        return self.send(format_digest(jobs))
 
-        self.send(
-f"""
-🔥 *HOT MATCH*
-
-💼 *Role*
-{job.title}
-
-🏢 *Company*
-{job.company}
-
-⭐ *Score*
-{job.score}
-
-🌍 *Country*
-{job.country}
-
-🔗 {job.url}
-"""
-        )
-
-    def send_high_match(self, job: Job):
-
-        self.send(
-f"""
-⭐ *HIGH MATCH*
-
-💼 {job.title}
-
-🏢 {job.company}
-
-⭐ Score: {job.score}
-
-🔗 {job.url}
-"""
-        )
-
-    def send_digest(self, message: str):
-
-        self.send(message)
-
-    def send_error(self, message: str):
-
-        self.send(
-f"""
-❌ *JobHunterAI Error*
-
-{message}
-"""
-        )
+    def send_error(self, message: str) -> bool:
+        safe_message = message.replace("\\", "\\\\")
+        return self.send(f"*JobHunterAI Error*\n\n{safe_message}")

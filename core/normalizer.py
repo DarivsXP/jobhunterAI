@@ -21,25 +21,22 @@ class JobNormalizer:
     _html_tags = re.compile(r"<[^>]+>")
 
     def normalize(self, job: Job) -> Job:
-        job.title = self._clean_text(job.title).title()
+        job.title = self._clean_text(str(job.title)).title()
+        job.company = self._clean_text(str(job.company))
+        job.description = self._clean_description(str(job.description))
+        job.country = self._clean_text(str(job.country))
+        job.source = self._clean_text(str(job.source))
+        job.url = self._normalize_url(str(job.url))
+        job.salary = self._clean_text(str(job.salary))
+        job.posted_at = self._clean_text(str(job.posted_at))
 
-        job.company = self._clean_text(job.company)
-
-        job.description = self._clean_description(job.description)
-
-        job.country = self._clean_text(job.country)
-
-        job.source = self._clean_text(job.source)
-
-        job.url = self._normalize_url(job.url)
-
-        if not job.salary.strip():
+        if not job.salary:
             job.salary = "Not specified"
 
         if not job.country:
             job.country = "Worldwide"
 
-        if not job.posted_at.strip():
+        if not job.posted_at:
             job.posted_at = "Unknown"
 
         return job
@@ -56,11 +53,8 @@ class JobNormalizer:
 
     def _clean_description(self, value: str) -> str:
         value = self._clean_text(value)
-
         value = self._html_tags.sub(" ", value)
-
         value = self._whitespace.sub(" ", value)
-
         return value.strip()
 
     def _normalize_url(self, url: str) -> str:
