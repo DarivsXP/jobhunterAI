@@ -22,7 +22,7 @@ class JobNormalizerTest(unittest.TestCase):
         normalized = normalizer.normalize(job)
 
         self.assertEqual(normalized.salary, "50000")
-        self.assertEqual(normalized.posted_at, "1234567890")
+        self.assertEqual(normalized.posted_at, "2009-02-13 23:31:30")
         self.assertEqual(normalized.url, "https://example.com/jobs/1")
 
 

@@ -15,7 +15,7 @@ logger = get_logger(__name__)
 
 class RemotiveScraper(BaseScraper):
 
-    URL = "https://remotive.com/api/remote-jobs"
+    URL = "https://remotive.com/api/remote-jobs?category=software-dev&limit=100"
 
     def fetch_jobs(self) -> List[Job]:
 

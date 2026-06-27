@@ -135,8 +135,12 @@ class DatabaseService:
                 """
                 SELECT
                     COUNT(*) AS total_jobs,
-                    SUM(CASE WHEN applied = 1 THEN 1 ELSE 0 END) AS applied_jobs,
                     SUM(CASE WHEN application_status = 'new' THEN 1 ELSE 0 END) AS new_jobs,
+                    SUM(CASE WHEN application_status = 'applied' THEN 1 ELSE 0 END) AS applied_jobs,
+                    SUM(CASE WHEN application_status = 'interviewing' THEN 1 ELSE 0 END) AS interviewing_jobs,
+                    SUM(CASE WHEN application_status = 'offer' THEN 1 ELSE 0 END) AS offer_jobs,
+                    SUM(CASE WHEN application_status = 'rejected' THEN 1 ELSE 0 END) AS rejected_jobs,
+                    SUM(CASE WHEN application_status = 'archived' THEN 1 ELSE 0 END) AS archived_jobs,
                     SUM(CASE WHEN priority = 'HOT' THEN 1 ELSE 0 END) AS hot_jobs,
                     SUM(CASE WHEN priority = 'HIGH' THEN 1 ELSE 0 END) AS high_jobs,
                     SUM(CASE WHEN priority = 'GOOD' THEN 1 ELSE 0 END) AS good_jobs
@@ -177,7 +181,10 @@ class DatabaseService:
                     ai_recommendation,
                     ai_reasoning,
                     application_status,
-                    created_at
+                    created_at,
+                    posted_at,
+                    description,
+                    salary
                 FROM jobs
             """
             params: list[object] = []
@@ -191,6 +198,29 @@ class DatabaseService:
 
             cursor.execute(query, params)
             return [self._row_to_job_summary(row) for row in cursor.fetchall()]
+
+        finally:
+            conn.close()
+
+    def get_job(self, job_id: int) -> dict[str, object] | None:
+        conn = self.db.connect()
+
+        try:
+            cursor = conn.cursor()
+            query = """
+                SELECT
+                    id, title, company, source, url, country, score, priority,
+                    interview_probability, matched_skills_json, missing_skills_json,
+                    ai_recommendation, ai_reasoning, application_status,
+                    created_at, posted_at, description, salary
+                FROM jobs
+                WHERE id = ?
+            """
+            cursor.execute(query, (job_id,))
+            row = cursor.fetchone()
+            if row:
+                return self._row_to_job_summary(row)
+            return None
 
         finally:
             conn.close()
@@ -223,7 +253,7 @@ class DatabaseService:
 
     def mark_application_status(self, job_id: int, status: str) -> bool:
         normalized_status = status.strip().lower()
-        applied = 0 if normalized_status == "new" else 1
+        applied = 0 if normalized_status in ("new", "archived") else 1
 
         conn = self.db.connect()
 
@@ -260,4 +290,7 @@ class DatabaseService:
             "ai_reasoning": row["ai_reasoning"] or "",
             "application_status": row["application_status"] or "new",
             "created_at": row["created_at"],
+            "posted_at": row["posted_at"] or "",
+            "description": row["description"] or "",
+            "salary": row["salary"] or "Not specified",
         }

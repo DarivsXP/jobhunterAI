@@ -14,10 +14,12 @@ class JobScorer:
     ROLE_TITLE_WEIGHT = 25
     ROLE_TEXT_WEIGHT = 10
     SKILL_WEIGHT = 6
+    MAX_SKILL_SCORE = 42          # cap at 7 skills worth of points
     COUNTRY_WEIGHT = 15
     REMOTE_WEIGHT = 10
-    JUNIOR_WEIGHT = 20
+    JUNIOR_WEIGHT = 40
     TITLE_FOCUS_WEIGHT = 6
+    SUPPORT_EXPERIENCE_BONUS = 15  # Cyril has 3.5yr support exp — reward support roles
     DISCOURAGED_TITLE_PENALTY = 25
     PORTFOLIO_WEIGHT = 5
 
@@ -35,7 +37,7 @@ class JobScorer:
             return self._reject(job, reasons)
 
         for title_filter in MY_PROFILE.excluded_titles:
-            if self._contains_term(text, title_filter):
+            if self._contains_term(title, title_filter):
                 reasons.append(f"Rejected ({title_filter})")
                 return self._reject(job, reasons)
 
@@ -50,7 +52,8 @@ class JobScorer:
                 matched_skills.append(skill)
 
         if matched_skills:
-            score += len(matched_skills) * self.SKILL_WEIGHT
+            skill_score = min(len(matched_skills) * self.SKILL_WEIGHT, self.MAX_SKILL_SCORE)
+            score += skill_score
             reasons.append(f"{len(matched_skills)} skill matches")
             job.matched_skills = matched_skills
 
@@ -71,6 +74,16 @@ class JobScorer:
         if any(keyword in title for keyword in MY_PROFILE.junior_title_keywords):
             score += self.JUNIOR_WEIGHT
             reasons.append("Junior Friendly")
+
+        # Bonus for support/helpdesk roles that match Cyril's 3.5yr support background
+        support_signals = (
+            "technical support", "application support", "support engineer",
+            "helpdesk", "help desk", "service desk", "it support",
+            "customer support", "customer technical support", "tier 2",
+        )
+        if any(s in title for s in support_signals) or any(s in text for s in support_signals[:4]):
+            score += self.SUPPORT_EXPERIENCE_BONUS
+            reasons.append("Support Background Match")
 
         if any(keyword in title for keyword in MY_PROFILE.discouraged_title_keywords):
             score -= self.DISCOURAGED_TITLE_PENALTY
@@ -125,18 +138,25 @@ class JobScorer:
             "REST API": ("rest api", "rest apis", "restful api", "restful apis"),
             "JavaScript": ("javascript", "js"),
             "GitHub": ("github", "git hub"),
+            "Vue.js": ("vue.js", "vue", "vuejs"),
+            "Vue": ("vue.js", "vue", "vuejs"),
+            "React.js": ("react.js", "react", "reactjs"),
+            "React": ("react.js", "react", "reactjs"),
+            "Tailwind CSS": ("tailwind css", "tailwind"),
+            "Docker": ("docker", "container"),
+            "C++": ("c++", "cpp"),
         }
 
         for term in aliases.get(skill, (skill.lower(),)):
-            if term in text:
+            if self._contains_term(text, term):
                 return True
 
         return False
 
     def _priority_for_score(self, score: int) -> str:
-        if score >= 90:
+        if score >= 80:
             return "HOT"
-        if score >= 75:
+        if score >= 65:
             return "HIGH"
         if score >= MY_PROFILE.minimum_score:
             return "GOOD"

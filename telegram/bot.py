@@ -9,7 +9,7 @@ import requests
 from config.settings import settings
 from core.logger import get_logger
 from core.models import Job
-from telegram.formatter import format_digest, format_job_message
+from telegram.formatter import escape_markdown, format_digest, format_job_message
 
 logger = get_logger(__name__)
 
@@ -61,5 +61,5 @@ class TelegramBot:
         return self.send(format_digest(jobs))
 
     def send_error(self, message: str) -> bool:
-        safe_message = message.replace("\\", "\\\\")
+        safe_message = escape_markdown(message)
         return self.send(f"*JobHunterAI Error*\n\n{safe_message}")

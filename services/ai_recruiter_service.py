@@ -5,6 +5,7 @@ Optional OpenAI-based recruiter enrichment.
 from __future__ import annotations
 
 import json
+import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -29,7 +30,7 @@ class AIRecruiterAnalysis:
 
 
 class AIRecruiterService:
-    _url = "https://api.openai.com/v1/responses"
+    _url = "https://api.openai.com/v1/chat/completions"
     _prompt_path = Path("prompts/recruiter.txt")
 
     def is_enabled(self) -> bool:
@@ -42,17 +43,79 @@ class AIRecruiterService:
         prompt = self._build_prompt(job)
         payload = {
             "model": settings.openai_model,
-            "input": [
+            "messages": [
                 {
                     "role": "user",
-                    "content": [
-                        {
-                            "type": "input_text",
-                            "text": prompt,
-                        }
-                    ],
+                    "content": prompt,
                 }
             ],
+            "response_format": {"type": "json_object"},
+        }
+
+        # Retry up to 3 times with exponential back-off on rate-limit errors
+        retry_delays = [2, 8, 20]
+        for attempt, delay in enumerate(retry_delays, start=1):
+            try:
+                response = requests.post(
+                    self._url,
+                    headers={
+                        "Authorization": f"Bearer {settings.openai_api_key}",
+                        "Content-Type": "application/json",
+                    },
+                    json=payload,
+                    timeout=60,
+                )
+
+                if response.status_code == 429:
+                    if attempt < len(retry_delays):
+                        logger.warning(
+                            "OpenAI rate limited (429) for %s — retrying in %ds (attempt %d/%d)",
+                            job.title, delay, attempt, len(retry_delays),
+                        )
+                        time.sleep(delay)
+                        continue
+                    else:
+                        logger.error(
+                            "OpenAI rate limited (429) for %s — giving up after %d attempts",
+                            job.title, len(retry_delays),
+                        )
+                        return None
+
+                response.raise_for_status()
+                return self._parse_response(response.json(), job)
+
+            except Exception:
+                logger.exception(
+                    "OpenAI recruiter enrichment failed for %s (%s)",
+                    job.title,
+                    job.company,
+                )
+                return None
+
+        return None
+
+    def generate_application_materials(self, job_dict: dict[str, Any]) -> dict[str, Any] | None:
+        if not self.is_enabled():
+            return None
+
+        skills = ", ".join(MY_PROFILE.preferred_skills)
+        prompt = (
+            "You are an expert career coach and technical recruiter. "
+            "I need a highly tailored cover letter and 3-5 customized resume bullet points for this job.\n\n"
+            f"Candidate: {MY_PROFILE.name}\n"
+            f"Level: {MY_PROFILE.experience_level}\n"
+            f"Summary: {MY_PROFILE.summary}\n"
+            f"Skills: {skills}\n\n"
+            f"Job Title: {job_dict.get('title')}\n"
+            f"Company: {job_dict.get('company')}\n"
+            f"Description: {job_dict.get('description')}\n\n"
+            "Return JSON only with keys: 'cover_letter' (string) and 'resume_bullets' (list of strings)."
+        )
+
+        payload = {
+            "model": settings.openai_model,
+            "messages": [{"role": "user", "content": prompt}],
+            "response_format": {"type": "json_object"},
         }
 
         try:
@@ -66,14 +129,20 @@ class AIRecruiterService:
                 timeout=60,
             )
             response.raise_for_status()
-            return self._parse_response(response.json(), job)
-
+            
+            choices = response.json().get("choices", [])
+            if not choices:
+                return None
+                
+            output_text = choices[0].get("message", {}).get("content", "").strip()
+            data = json.loads(output_text)
+            
+            return {
+                "cover_letter": str(data.get("cover_letter", "")).strip(),
+                "resume_bullets": [str(b).strip() for b in data.get("resume_bullets", []) if str(b).strip()]
+            }
         except Exception:
-            logger.exception(
-                "OpenAI recruiter enrichment failed for %s (%s)",
-                job.title,
-                job.company,
-            )
+            logger.exception("Failed to generate application materials for %s", job_dict.get('title'))
             return None
 
     def _build_prompt(self, job: Job) -> str:
@@ -131,7 +200,16 @@ class AIRecruiterService:
         payload: dict[str, Any],
         job: Job,
     ) -> AIRecruiterAnalysis | None:
-        output_text = payload.get("output_text", "").strip()
+        choices = payload.get("choices", [])
+        if not choices:
+            logger.warning(
+                "OpenAI recruiter returned no choices for %s (%s)",
+                job.title,
+                job.company,
+            )
+            return None
+
+        output_text = choices[0].get("message", {}).get("content", "").strip()
 
         if not output_text:
             logger.warning(
