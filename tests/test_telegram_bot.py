@@ -46,6 +46,13 @@ class TelegramBotTest(unittest.TestCase):
         self.assertIn("Interview Probability", message)
         self.assertIn("AI Recommendation", message)
         self.assertIn("Laravel", message)
+        self.assertIn("[Link to Job](https://example.com/jobs/laravel)", message)
+
+    def test_escape_url(self) -> None:
+        from telegram.formatter import escape_url
+        url = "https://example.com/jobs/laravel(1)?ref=abc\\xyz"
+        escaped = escape_url(url)
+        self.assertEqual(escaped, "https://example.com/jobs/laravel(1\\)?ref=abc\\\\xyz")
 
 
 if __name__ == "__main__":

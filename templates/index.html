@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobHunterAI Kanban</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #f8fafc;
+            --bg-surface: #ffffff;
+            --bg-surface-hover: #f1f5f9;
+            --border-color: #cbd5e1;
+            --border-glow: rgba(14, 165, 233, 0.3);
+            
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-accent: #0ea5e9;
+            
+            --primary: #0ea5e9;
+            --primary-hover: #0284c7;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --magic: #a855f7;
+
+            --col-new: rgba(14, 165, 233, 0.05);
+            --col-new-border: rgba(14, 165, 233, 0.5);
+            
+            --col-applied: rgba(245, 158, 11, 0.05);
+            --col-applied-border: rgba(245, 158, 11, 0.5);
+            
+            --col-interview: rgba(168, 85, 247, 0.05);
+            --col-interview-border: rgba(168, 85, 247, 0.5);
+            
+            --col-offer: rgba(16, 185, 129, 0.05);
+            --col-offer-border: rgba(16, 185, 129, 0.5);
+            
+            --col-reject: rgba(239, 68, 68, 0.05);
+            --col-reject-border: rgba(239, 68, 68, 0.5);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(14, 165, 233, 0.08), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(168, 85, 247, 0.08), transparent 25%);
+        }
+
+        h1, h2, h3, h4, h5, h6, .logo-text, .btn, .col-header {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+            z-index: 10;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .logo-icon {
+            width: 36px; height: 36px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--magic) 100%);
+            border-radius: 10px;
+            display: flex; justify-content: center; align-items: center;
+            font-weight: 800; font-size: 20px; color: white;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+        }
+
+        .logo-text { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+
+        .stats-box {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-item {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 12px; font-size: 14px; color: var(--text-secondary);
+        }
+        .stat-item:last-child { margin-bottom: 0; }
+        .stat-value { font-weight: 700; color: var(--text-primary); font-family: 'Outfit', sans-serif; }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .topbar {
+            padding: 20px 32px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .filters { display: flex; gap: 12px; }
+        .search-input, .filter-select {
+            background: rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary); padding: 10px 16px;
+            border-radius: 8px; font-family: inherit; font-size: 14px;
+            outline: none; transition: all 0.3s;
+        }
+        .search-input:focus, .filter-select:focus {
+            border-color: var(--primary); background: rgba(0, 0, 0, 0.08);
+        }
+
+        .btn {
+            background: var(--primary); color: white;
+            border: none; padding: 10px 20px; border-radius: 8px;
+            font-weight: 600; font-size: 14px; cursor: pointer;
+            transition: all 0.3s;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .btn:hover { background: var(--primary-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3); }
+        .btn-magic { background: linear-gradient(135deg, var(--magic), #d946ef); }
+        .btn-magic:hover { box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4); }
+
+        /* Kanban Board */
+        .kanban-board {
+            display: flex;
+            gap: 20px;
+            padding: 24px 32px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            flex: 1;
+        }
+
+        .kanban-column {
+            flex: 0 0 340px;
+            display: flex;
+            flex-direction: column;
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            max-height: 100%;
+            transition: all 0.3s;
+        }
+
+        .kanban-column.col-new {
+            flex: 0 0 450px; /* Make New Matches significantly wider */
+        }
+
+        .kanban-column.drag-over {
+            background: rgba(0, 0, 0, 0.05);
+            border-style: dashed;
+        }
+
+        .col-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .col-count {
+            background: rgba(255, 255, 255, 0.1); padding: 2px 8px;
+            border-radius: 12px; font-size: 12px; font-family: 'Inter';
+        }
+
+        .col-new .col-header { border-top: 3px solid var(--col-new-border); border-radius: 16px 16px 0 0; }
+        .col-applied .col-header { border-top: 3px solid var(--col-applied-border); border-radius: 16px 16px 0 0; }
+        .col-interviewing .col-header { border-top: 3px solid var(--col-interview-border); border-radius: 16px 16px 0 0; }
+        .col-offer .col-header { border-top: 3px solid var(--col-offer-border); border-radius: 16px 16px 0 0; }
+        .col-rejected .col-header { border-top: 3px solid var(--col-reject-border); border-radius: 16px 16px 0 0; }
+
+        .kanban-cards {
+            padding: 16px;
+            overflow-y: auto;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* Job Card */
+        .job-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            cursor: grab;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .job-card:active { cursor: grabbing; }
+        .job-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+        .job-title { font-size: 15px; font-weight: 600; line-height: 1.3; font-family: 'Outfit'; }
+        .job-company { font-size: 13px; color: var(--text-secondary); margin-bottom: 12px; display: flex; justify-content: space-between; }
+        
+        .score-badge {
+            background: rgba(255, 255, 255, 0.1); padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 700;
+        }
+
+        .card-details {
+            display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;
+        }
+        .detail-tag {
+            font-size: 11px; padding: 4px 8px; background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.05); border-radius: 6px; color: var(--text-secondary);
+        }
+
+        .card-actions {
+            display: flex; gap: 8px;
+        }
+        .action-btn {
+            flex: 1; padding: 8px; border-radius: 6px; font-size: 12px; font-weight: 600;
+            border: 1px solid var(--border-color); background: rgba(0,0,0,0.03);
+            color: var(--text-primary); cursor: pointer; transition: 0.2s; text-align: center; text-decoration: none;
+        }
+        .action-btn:hover { background: rgba(0,0,0,0.08); }
+        .action-btn.magic { background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.3); color: #c084fc; }
+        .action-btn.magic:hover { background: rgba(168, 85, 247, 0.2); }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px);
+            display: none; justify-content: center; align-items: center; z-index: 100;
+        }
+        .modal {
+            background: #0f172a; border: 1px solid var(--border-color);
+            border-radius: 16px; width: 90%; max-width: 800px; max-height: 90vh;
+            display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+        }
+        .modal-header {
+            padding: 20px 24px; border-bottom: 1px solid var(--border-color);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .modal-title { font-family: 'Outfit'; font-size: 20px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+        .close-btn { background: none; border: none; color: var(--text-secondary); font-size: 24px; cursor: pointer; }
+        .close-btn:hover { color: var(--text-primary); }
+        .modal-body { padding: 24px; overflow-y: auto; line-height: 1.6; font-size: 14px; color: var(--text-secondary); }
+        .modal-body h3 { color: var(--text-primary); margin-top: 20px; margin-bottom: 10px; font-family: 'Outfit'; }
+        .modal-body pre { white-space: pre-wrap; font-family: 'Inter'; background: #f8fafc; padding: 16px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 20px; color: var(--text-primary); }
+        .modal-body ul { padding-left: 20px; margin-bottom: 20px; }
+        .modal-body li { margin-bottom: 8px; }
+
+        /* Loading Spinner */
+        .loader {
+            border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid var(--magic);
+            border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo-area">
+            <div class="logo-icon">J</div>
+            <div class="logo-text">JobHunterAI</div>
+        </div>
+        
+        <h4 style="margin-bottom: 16px; color: var(--text-secondary); font-size: 12px; text-transform: uppercase; letter-spacing: 1px;">Pipeline Stats</h4>
+        
+        <div class="stats-box">
+            <div class="stat-item"><span>Total Sourced</span> <span class="stat-value" id="stat-total">0</span></div>
+            <div class="stat-item"><span>New Matches</span> <span class="stat-value" id="stat-new">0</span></div>
+            <div class="stat-item"><span>Applied</span> <span class="stat-value" style="color: var(--warning)" id="stat-applied">0</span></div>
+            <div class="stat-item"><span>Interviewing</span> <span class="stat-value" style="color: var(--magic)" id="stat-interviewing">0</span></div>
+            <div class="stat-item"><span>Offers</span> <span class="stat-value" style="color: var(--success)" id="stat-offer">0</span></div>
+        </div>
+
+        <button class="btn" style="width: 100%; justify-content: center; margin-top: auto;" onclick="triggerScan()">
+            <span id="scan-icon">📡</span> <span id="scan-text">Run Scrapers</span>
+        </button>
+    </div>
+
+    <div class="main-content">
+        <div class="topbar">
+            <div class="filters">
+                <input type="text" class="search-input" id="search-box" placeholder="Search jobs..." oninput="renderBoard()">
+                <select class="filter-select" id="priority-filter" onchange="loadJobs()">
+                    <option value="">All Priorities</option>
+                    <option value="HOT">🔥 HOT</option>
+                    <option value="HIGH">⚡ HIGH</option>
+                    <option value="GOOD">🟢 GOOD</option>
+                </select>
+                <select class="filter-select" id="age-filter" onchange="loadJobs()">
+                    <option value="">Any Time</option>
+                    <option value="7">Last 7 Days</option>
+                    <option value="14">Last 14 Days</option>
+                </select>
+            </div>
+            <div style="font-size: 13px; color: var(--text-secondary);">
+                Drag and drop cards to update status
+            </div>
+        </div>
+
+        <div class="kanban-board">
+            <!-- Columns -->
+            <div class="kanban-column col-new" data-status="new" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
+                <div class="col-header">
+                    <span>New Matches</span> <span class="col-count" id="count-new">0</span>
+                </div>
+                <div class="kanban-cards" id="col-new-cards"></div>
+            </div>
+
+            <div class="kanban-column col-applied" data-status="applied" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
+                <div class="col-header">
+                    <span>Applied</span> <span class="col-count" id="count-applied">0</span>
+                </div>
+                <div class="kanban-cards" id="col-applied-cards"></div>
+            </div>
+
+            <div class="kanban-column col-interviewing" data-status="interviewing" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
+                <div class="col-header">
+                    <span>Interviewing</span> <span class="col-count" id="count-interviewing">0</span>
+                </div>
+                <div class="kanban-cards" id="col-interviewing-cards"></div>
+            </div>
+
+            <div class="kanban-column col-offer" data-status="offer" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
+                <div class="col-header">
+                    <span>Offers</span> <span class="col-count" id="count-offer">0</span>
+                </div>
+                <div class="kanban-cards" id="col-offer-cards"></div>
+            </div>
+
+            <div class="kanban-column col-rejected" data-status="rejected" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
+                <div class="col-header">
+                    <span>Rejected</span> <span class="col-count" id="count-rejected">0</span>
+                </div>
+                <div class="kanban-cards" id="col-rejected-cards"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Modal -->
+    <div class="modal-overlay" id="ai-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title"><span style="color: var(--magic)">✨</span> AI Application Tailoring</div>
+                <button class="close-btn" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body" id="modal-content">
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px;">
+                    <div class="loader"></div>
+                    <div style="margin-top: 16px; font-family: 'Outfit';">Crafting perfect application materials...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allJobs = [];
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStats();
+            loadJobs();
+        });
+
+        async function loadStats() {
+            try {
+                const res = await fetch('/api/stats');
+                const data = await res.json();
+                document.getElementById('stat-total').innerText = data.total_jobs || 0;
+                document.getElementById('stat-new').innerText = data.new_jobs || 0;
+                document.getElementById('stat-applied').innerText = data.applied_jobs || 0;
+                document.getElementById('stat-interviewing').innerText = data.interviewing_jobs || 0;
+                document.getElementById('stat-offer').innerText = data.offer_jobs || 0;
+            } catch (err) { console.error("Stats error", err); }
+        }
+
+        async function loadJobs() {
+            const priority = document.getElementById('priority-filter').value;
+            const age = document.getElementById('age-filter').value;
+            let url = `/api/jobs?limit=500`;
+            if (priority) url += `&priority=${priority}`;
+            if (age) url += `&max_age_days=${age}`;
+
+            try {
+                const res = await fetch(url);
+                allJobs = await res.json();
+                renderBoard();
+            } catch (err) { console.error("Jobs error", err); }
+        }
+
+        function renderBoard() {
+            const searchQuery = document.getElementById('search-box').value.toLowerCase().trim();
+            const cols = { new: [], applied: [], interviewing: [], offer: [], rejected: [] };
+            
+            allJobs.forEach(job => {
+                if (searchQuery && !job.title.toLowerCase().includes(searchQuery) && !job.company.toLowerCase().includes(searchQuery)) return;
+                const status = job.application_status || 'new';
+                if (cols[status]) cols[status].push(job);
+            });
+
+            Object.keys(cols).forEach(status => {
+                const container = document.getElementById(`col-${status}-cards`);
+                const countEl = document.getElementById(`count-${status}`);
+                countEl.innerText = cols[status].length;
+                
+                container.innerHTML = cols[status].map(job => `
+                    <div class="job-card" id="job-${job.id}" draggable="true" ondragstart="dragStart(event)">
+                        <div class="card-top">
+                            <div class="job-title">${escapeHtml(job.title)}</div>
+                            <div class="score-badge">${job.score}</div>
+                        </div>
+                        <div class="job-company">
+                            <span>${escapeHtml(job.company)}</span>
+                            <span>${job.country}</span>
+                        </div>
+                        <div class="card-details">
+                            <span class="detail-tag">${job.source}</span>
+                            <span class="detail-tag">${timeAgo(job.posted_at || job.created_at)}</span>
+                        </div>
+                        <div class="card-actions">
+                            <button class="action-btn" style="flex: 0 0 auto; color: var(--text-secondary);" onclick="updateStatus(${job.id}, 'archived')" title="Archive">🗑️</button>
+                            <button class="action-btn magic" onclick="generateMaterials(${job.id})">✨ Auto-Tailor</button>
+                            <a href="${job.url}" target="_blank" class="action-btn">View Job</a>
+                        </div>
+                    </div>
+                `).join('');
+            });
+        }
+
+        // Drag and Drop Logic
+        function dragStart(e) {
+            e.dataTransfer.setData('text/plain', e.target.id);
+            setTimeout(() => e.target.style.opacity = '0.5', 0);
+        }
+
+        function dragEnter(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
+        function dragLeave(e) { e.currentTarget.classList.remove('drag-over'); }
+        function allowDrop(e) { e.preventDefault(); }
+
+        async function drop(e) {
+            e.preventDefault();
+            const col = e.currentTarget;
+            col.classList.remove('drag-over');
+            const cardId = e.dataTransfer.getData('text/plain');
+            const card = document.getElementById(cardId);
+            card.style.opacity = '1';
+            
+            const newStatus = col.getAttribute('data-status');
+            const jobId = parseInt(cardId.split('-')[1]);
+            
+            const jobIndex = allJobs.findIndex(j => j.id === jobId);
+            if (jobIndex > -1 && allJobs[jobIndex].application_status !== newStatus) {
+                // Optimistic UI update
+                allJobs[jobIndex].application_status = newStatus;
+                renderBoard();
+                
+                // API call
+                try {
+                    await fetch(`/api/jobs/${jobId}/status`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ status: newStatus })
+                    });
+                    loadStats();
+                } catch (err) {
+                    console.error("Update failed", err);
+                    loadJobs(); // Revert on failure
+                }
+            }
+        }
+
+        async function updateStatus(jobId, newStatus) {
+            const jobIndex = allJobs.findIndex(j => j.id === jobId);
+            if (jobIndex > -1) {
+                // Optimistic UI update
+                allJobs[jobIndex].application_status = newStatus;
+                renderBoard();
+                
+                // API call
+                try {
+                    await fetch(`/api/jobs/${jobId}/status`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ status: newStatus })
+                    });
+                    loadStats();
+                } catch (err) {
+                    console.error("Update failed", err);
+                    loadJobs(); // Revert on failure
+                }
+            }
+        }
+
+        // AI Materials Generator
+        async function generateMaterials(jobId) {
+            const modal = document.getElementById('ai-modal');
+            const content = document.getElementById('modal-content');
+            modal.style.display = 'flex';
+            
+            content.innerHTML = `
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px;">
+                    <div class="loader"></div>
+                    <div style="margin-top: 16px; font-family: 'Outfit';">Crafting perfect application materials...</div>
+                </div>
+            `;
+
+            try {
+                const res = await fetch(`/api/jobs/${jobId}/generate_materials`, { method: 'POST' });
+                const data = await res.json();
+                
+                if (data.error) throw new Error(data.error);
+
+                const bulletsHtml = data.resume_bullets.map(b => `<li>${escapeHtml(b)}</li>`).join('');
+                
+                content.innerHTML = `
+                    <h3>Tailored Cover Letter</h3>
+                    <pre id="cover-letter-text">${escapeHtml(data.cover_letter)}</pre>
+                    <button class="btn btn-magic" style="margin-bottom: 24px;" onclick="copyToClipboard('cover-letter-text')">📋 Copy Cover Letter</button>
+                    
+                    <h3>Optimized Resume Bullets</h3>
+                    <ul>${bulletsHtml}</ul>
+                `;
+            } catch (err) {
+                content.innerHTML = `<div style="color: var(--danger); padding: 20px;">Error: ${err.message}</div>`;
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('ai-modal').style.display = 'none';
+        }
+
+        function copyToClipboard(elementId) {
+            const text = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Copied to clipboard!');
+            });
+        }
+
+        async function triggerScan() {
+            const textEl = document.getElementById('scan-text');
+            const iconEl = document.getElementById('scan-icon');
+            textEl.innerText = "Scanning...";
+            iconEl.innerHTML = '<div class="loader" style="width:14px;height:14px;border-width:2px"></div>';
+            
+            await fetch('/api/scan', { method: 'POST' });
+            setTimeout(() => {
+                textEl.innerText = "Run Scrapers";
+                iconEl.innerText = "📡";
+                loadJobs();
+            }, 3000);
+        }
+
+        function escapeHtml(unsafe) {
+            return (unsafe || '').toString()
+                 .replace(/&/g, "&amp;")
+                 .replace(/</g, "&lt;")
+                 .replace(/>/g, "&gt;")
+                 .replace(/"/g, "&quot;")
+                 .replace(/'/g, "&#039;");
+        }
+
+        function timeAgo(dateString) {
+            if (!dateString) return 'Recent';
+            let postDate = new Date(dateString.replace(/-/g, '/').replace(/T/, ' ').replace(/Z$/, ''));
+            if (isNaN(postDate)) return dateString.slice(0, 10);
+            
+            const diffMs = Math.abs(new Date() - postDate);
+            const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+            const diffDays = Math.floor(diffHours / 24);
+            
+            if (diffDays > 0) return diffDays === 1 ? '1 day ago' : `${diffDays} days ago`;
+            if (diffHours > 0) return diffHours === 1 ? '1 hour ago' : `${diffHours} hours ago`;
+            return 'Just now';
+        }
+    </script>
+</body>
+</html>

@@ -30,10 +30,78 @@ class JobPrefilter:
         if self._contains_any(title, MY_PROFILE.prefilter_excluded_keywords):
             return False
 
+        if self._requires_too_much_experience(title, description):
+            return False
+
+        if self._is_too_old(job.posted_at):
+            return False
+
         if self._has_target_title_signal(title):
             return True
 
         return self._is_internship_match(title, combined)
+
+    def _is_too_old(self, posted_at: str) -> bool:
+        if not posted_at or posted_at == "Unknown":
+            return False
+
+        import datetime
+
+        try:
+            posted_dt = datetime.datetime.strptime(
+                posted_at[:19], "%Y-%m-%d %H:%M:%S"
+            ).replace(tzinfo=datetime.timezone.utc)
+            now = datetime.datetime.now(datetime.timezone.utc)
+            age_days = (now - posted_dt).days
+            if age_days > 30:
+                return True
+        except Exception:
+            pass
+
+        return False
+
+    def _requires_too_much_experience(self, title: str, description: str) -> bool:
+        is_junior_title = any(
+            keyword in title
+            for keyword in MY_PROFILE.junior_title_keywords
+        )
+        is_support_title = "support" in title
+
+        # If it's a support role, we allow up to 5 years of experience.
+        # If it is a junior role, we allow up to 4 years.
+        # Otherwise, we allow up to 3 years.
+        if is_support_title:
+            max_allowed_years = 5
+        elif is_junior_title:
+            max_allowed_years = 4
+        else:
+            max_allowed_years = 3
+
+        matches = re.finditer(
+            r"\b(\d+)\+?\s*(?:-\s*\d+\+?|\s+to\s+\d+)?\s*(?:years?|yrs?)\b",
+            description,
+            re.IGNORECASE,
+        )
+        for m in matches:
+            try:
+                years = int(m.group(1))
+                if years > max_allowed_years:
+                    # Double check context to avoid false positives (e.g. company age)
+                    start = max(0, m.start() - 50)
+                    end = min(len(description), m.end() + 50)
+                    context = description[start:end].lower()
+                    context_keywords = [
+                        "experience", "exp", "work", "background", "minimum", "at least",
+                        "require", "preferred", "qualification", "level", "mid", "senior",
+                        "coding", "programming", "development", "need", "must have", "track record",
+                        "relevant", "professional"
+                    ]
+                    if any(k in context for k in context_keywords):
+                        return True
+            except ValueError:
+                continue
+
+        return False
 
     def _has_target_title_signal(self, title: str) -> bool:
         return any(

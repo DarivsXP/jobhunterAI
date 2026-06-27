@@ -21,7 +21,7 @@ class Settings:
 
 settings = Settings(
     openai_api_key=os.getenv("OPENAI_API_KEY", "").strip(),
-    openai_model=os.getenv("OPENAI_MODEL", "gpt-4.1-mini").strip(),
+    openai_model=os.getenv("OPENAI_MODEL", "gpt-4o-mini").strip(),
     telegram_token=os.getenv("TELEGRAM_TOKEN", "").strip(),
     telegram_chat_id=os.getenv("TELEGRAM_CHAT_ID", "").strip(),
     database_path=Path(

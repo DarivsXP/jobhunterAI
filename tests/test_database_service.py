@@ -99,6 +99,39 @@ class DatabaseServiceTest(unittest.TestCase):
         updated = service.list_jobs(limit=1)[0]
         self.assertEqual(updated["application_status"], "applied")
 
+    def test_updates_application_status_to_archived(self) -> None:
+        service = DatabaseService()
+        job = Job(
+            title="Python Engineer",
+            company="Example Co",
+            description="Remote Django role.",
+            url="https://example.com/jobs/django",
+            posted_at="2026-06-27",
+            salary="Not specified",
+            country="Worldwide",
+            remote=True,
+            source="UnitTest",
+            fingerprint="archived-fingerprint",
+            score=63,
+            priority="GOOD",
+        )
+
+        service.save(job)
+        job_id = [j for j in service.list_jobs(limit=10) if j["url"] == job.url][0]["id"]
+
+        self.assertTrue(service.mark_application_status(job_id, "archived"))
+
+        # Verify in database directly that applied is 0 and status is archived
+        conn = service.db.connect()
+        try:
+            cursor = conn.cursor()
+            cursor.execute("SELECT applied, application_status FROM jobs WHERE id = ?", (job_id,))
+            row = cursor.fetchone()
+            self.assertEqual(row["applied"], 0)
+            self.assertEqual(row["application_status"], "archived")
+        finally:
+            conn.close()
+
 
 if __name__ == "__main__":
     unittest.main()

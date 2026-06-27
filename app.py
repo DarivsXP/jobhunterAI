@@ -15,6 +15,16 @@ def build_parser() -> argparse.ArgumentParser:
 
     subparsers.add_parser("run", help="Run the job collection pipeline.")
 
+    subparsers.add_parser(
+        "schedule",
+        help="Start the background scheduler to scan jobs periodically.",
+    )
+
+    subparsers.add_parser(
+        "web",
+        help="Launch the visual web dashboard and background scheduler.",
+    )
+
     report_parser = subparsers.add_parser(
         "report",
         help="Show a local dashboard from saved jobs.",
@@ -101,6 +111,26 @@ def update_status(job_id: int, status: str) -> None:
         print(f"Job {job_id} was not found.")
 
 
+def run_scheduler() -> None:
+    logger.info("=" * 60)
+    logger.info("Starting JobHunterAI Scheduler")
+    logger.info("=" * 60)
+
+    from core.database import Database
+    from core.scheduler import Scheduler
+
+    database = Database()
+    database.initialize()
+
+    scheduler = Scheduler()
+    try:
+        scheduler.start()
+    except KeyboardInterrupt:
+        logger.warning("Scheduler interrupted by user.")
+    except Exception:
+        logger.exception("Fatal scheduler error.")
+
+
 def main() -> None:
     parser = build_parser()
     args = parser.parse_args()
@@ -108,6 +138,15 @@ def main() -> None:
 
     if command == "run":
         run_pipeline()
+        return
+
+    if command == "schedule":
+        run_scheduler()
+        return
+
+    if command == "web":
+        from web_server import start_server
+        start_server()
         return
 
     if command == "report":

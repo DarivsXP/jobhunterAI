@@ -4,6 +4,7 @@ Recruiter Service
 
 from __future__ import annotations
 
+import time
 from typing import Protocol
 
 from core.logger import get_logger
@@ -61,6 +62,10 @@ class RecruiterService:
 
                 self._enrich_with_ai(job)
                 accepted.append(job)
+
+                # Small pause between AI calls to stay under OpenAI's RPM limit
+                if self.ai_recruiter.is_enabled():
+                    time.sleep(2)
 
             except Exception:
                 logger.exception(

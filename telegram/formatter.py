@@ -16,6 +16,13 @@ def escape_markdown(text: str) -> str:
     return escaped
 
 
+def escape_url(url: str) -> str:
+    escaped = url or ""
+    escaped = escaped.replace("\\", "\\\\")
+    escaped = escaped.replace(")", "\\)")
+    return escaped
+
+
 def format_job_message(job: Job) -> str:
     recommendation = (
         f"\n*AI Recommendation*: {escape_markdown(job.ai_recommendation)}"
@@ -44,19 +51,19 @@ def format_job_message(job: Job) -> str:
         f"{skills}"
         f"{recommendation}"
         f"{reasoning}\n"
-        f"*URL*: {escape_markdown(job.url)}"
+        f"*URL*: [Link to Job]({escape_url(job.url)})"
     )
 
 
 def format_digest(jobs: list[Job]) -> str:
     if not jobs:
-        return "*JobHunterAI Digest*\n\nNo accepted jobs in this run."
+        return "*JobHunterAI Digest*\n\nNo accepted jobs in this run\\."
 
     lines = ["*JobHunterAI Digest*", ""]
 
     for job in jobs[:5]:
         lines.append(
-            f"- *{escape_markdown(job.priority)}* | {job.score} | "
+            f"\\- *{escape_markdown(job.priority)}* \\| {job.score} \\| "
             f"{escape_markdown(job.title)} at {escape_markdown(job.company)}"
         )
 

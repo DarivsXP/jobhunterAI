@@ -32,13 +32,19 @@ class AIRecruiterServiceTest(unittest.TestCase):
     def test_parses_response_output_text(self) -> None:
         service = AIRecruiterService()
         payload = {
-            "output_text": (
-                '{"interview_probability": 81,'
-                '"matched_skills":["PHP","Laravel"],'
-                '"missing_skills":["Docker"],'
-                '"recommendation":"Apply",'
-                '"reasoning":"Strong backend overlap for a junior candidate."}'
-            )
+            "choices": [
+                {
+                    "message": {
+                        "content": (
+                            '{"interview_probability": 81,'
+                            '"matched_skills":["PHP","Laravel"],'
+                            '"missing_skills":["Docker"],'
+                            '"recommendation":"Apply",'
+                            '"reasoning":"Strong backend overlap for a junior candidate."}'
+                        )
+                    }
+                }
+            ]
         }
         job = Job(
             title="Junior Laravel Developer",
@@ -59,6 +65,23 @@ class AIRecruiterServiceTest(unittest.TestCase):
         self.assertEqual(analysis.interview_probability, 81)
         self.assertEqual(analysis.recommendation, "Apply")
         self.assertIn("Laravel", analysis.matched_skills)
+
+    def test_build_prompt_does_not_raise_key_error(self) -> None:
+        service = AIRecruiterService()
+        job = Job(
+            title="Junior Laravel Developer",
+            company="Example Co",
+            description="Remote backend role.",
+            url="https://example.com/jobs/laravel",
+            posted_at="2026-06-27",
+            salary="Not specified",
+            country="Worldwide",
+            remote=True,
+            source="UnitTest",
+        )
+        prompt = service._build_prompt(job)
+        self.assertIn("Junior Laravel Developer", prompt)
+        self.assertIn('"interview_probability"', prompt)
 
 
 if __name__ == "__main__":
