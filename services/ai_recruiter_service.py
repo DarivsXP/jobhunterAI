@@ -30,7 +30,7 @@ class AIRecruiterAnalysis:
 
 
 class AIRecruiterService:
-    _url = "https://api.openai.com/v1/chat/completions"
+    _url = settings.openai_base_url
     _prompt_path = Path("prompts/recruiter.txt")
 
     def is_enabled(self) -> bool:
