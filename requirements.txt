@@ -2,3 +2,5 @@ requests
 python-dotenv
 schedule
 flask
+beautifulsoup4
+playwright
