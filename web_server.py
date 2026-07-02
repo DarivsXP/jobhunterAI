@@ -168,12 +168,14 @@ def get_scan_status() -> Any:
 
 
 def start_server() -> None:
+    import os
     # Start background scheduler thread
     scheduler_thread = threading.Thread(target=run_scheduler_worker, daemon=True)
     scheduler_thread.start()
 
-    logger.info("Web Server starting on http://localhost:5000")
-    app.run(host="0.0.0.0", port=5000, debug=False)
+    port = int(os.environ.get("PORT", 7860))
+    logger.info(f"Web Server starting on http://0.0.0.0:{port}")
+    app.run(host="0.0.0.0", port=port, debug=False)
 
 
 if __name__ == "__main__":
