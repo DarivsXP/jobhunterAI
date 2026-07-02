@@ -1,3 +1,12 @@
+---
+title: JobHunterAI
+emoji: 🚀
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+pinned: false
+---
+
 # JobHunterAI
 
 AI-powered career assistant for finding, scoring, ranking, saving, and tracking remote jobs for a junior software developer profile.
