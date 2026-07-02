@@ -60,12 +60,14 @@ class RecruiterService:
                 job.matched_skills = evaluation.matched_skills
                 job.missing_skills = evaluation.missing_skills
 
-                self._enrich_with_ai(job)
-                accepted.append(job)
+                if job.score >= 55:
+                    self._enrich_with_ai(job)
+                    
+                    # Small pause between AI calls to stay under OpenAI's RPM limit
+                    if self.ai_recruiter.is_enabled():
+                        time.sleep(2)
 
-                # Small pause between AI calls to stay under OpenAI's RPM limit
-                if self.ai_recruiter.is_enabled():
-                    time.sleep(2)
+                accepted.append(job)
 
             except Exception:
                 logger.exception(

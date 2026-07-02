@@ -30,7 +30,7 @@ class GoogleJobsScraper(BaseScraper):
         try:
             with sync_playwright() as p:
                 # We run headful (headless=False) so you can manually solve the CAPTCHA if needed
-                browser = p.chromium.launch(headless=False)
+                browser = p.chromium.launch(headless=True)
                 
                 # Load previous session state if it exists to bypass CAPTCHA
                 context_args = {}
