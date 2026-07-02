@@ -3,19 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JobHunterAI Kanban</title>
+    <title>JobHunterAI ✨ Premium Kanban</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-base: #f8fafc;
-            --bg-surface: #ffffff;
-            --bg-surface-hover: #f1f5f9;
-            --border-color: #cbd5e1;
-            --border-glow: rgba(14, 165, 233, 0.3);
+            /* Premium Dark Mode Palette */
+            --bg-base: #09090b;
+            --bg-surface: rgba(24, 24, 27, 0.65);
+            --bg-surface-hover: rgba(39, 39, 42, 0.8);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --border-glow: rgba(14, 165, 233, 0.5);
             
-            --text-primary: #0f172a;
-            --text-secondary: #475569;
-            --text-accent: #0ea5e9;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-accent: #38bdf8;
             
             --primary: #0ea5e9;
             --primary-hover: #0284c7;
@@ -23,21 +25,26 @@
             --warning: #f59e0b;
             --danger: #ef4444;
             --magic: #a855f7;
+            --archive: #64748b;
 
-            --col-new: rgba(14, 165, 233, 0.05);
-            --col-new-border: rgba(14, 165, 233, 0.5);
+            /* Column Colors */
+            --col-new-glow: rgba(14, 165, 233, 0.15);
+            --col-new-border: #0ea5e9;
             
-            --col-applied: rgba(245, 158, 11, 0.05);
-            --col-applied-border: rgba(245, 158, 11, 0.5);
+            --col-applied-glow: rgba(245, 158, 11, 0.15);
+            --col-applied-border: #f59e0b;
             
-            --col-interview: rgba(168, 85, 247, 0.05);
-            --col-interview-border: rgba(168, 85, 247, 0.5);
+            --col-interview-glow: rgba(168, 85, 247, 0.15);
+            --col-interview-border: #a855f7;
             
-            --col-offer: rgba(16, 185, 129, 0.05);
-            --col-offer-border: rgba(16, 185, 129, 0.5);
+            --col-offer-glow: rgba(16, 185, 129, 0.15);
+            --col-offer-border: #10b981;
             
-            --col-reject: rgba(239, 68, 68, 0.05);
-            --col-reject-border: rgba(239, 68, 68, 0.5);
+            --col-reject-glow: rgba(239, 68, 68, 0.15);
+            --col-reject-border: #ef4444;
+
+            --col-archive-glow: rgba(100, 116, 139, 0.15);
+            --col-archive-border: #64748b;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -50,58 +57,65 @@
             height: 100vh;
             overflow: hidden;
             background-image: 
-                radial-gradient(circle at 15% 50%, rgba(14, 165, 233, 0.08), transparent 25%),
-                radial-gradient(circle at 85% 30%, rgba(168, 85, 247, 0.08), transparent 25%);
+                radial-gradient(circle at 10% 20%, rgba(14, 165, 233, 0.15), transparent 30%),
+                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.15), transparent 30%),
+                radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.05), transparent 50%);
+            background-size: cover;
+            background-attachment: fixed;
         }
 
         h1, h2, h3, h4, h5, h6, .logo-text, .btn, .col-header {
             font-family: 'Outfit', sans-serif;
         }
 
-        /* Sidebar */
+        /* Sidebar - Glassmorphism */
         .sidebar {
-            width: 260px;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
+            width: 280px;
+            background: rgba(9, 9, 11, 0.7);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
             border-right: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
-            padding: 24px;
+            padding: 28px;
             z-index: 10;
+            box-shadow: 4px 0 24px rgba(0,0,0,0.4);
         }
 
         .logo-area {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 40px;
+            gap: 14px;
+            margin-bottom: 48px;
         }
 
         .logo-icon {
-            width: 36px; height: 36px;
+            width: 42px; height: 42px;
             background: linear-gradient(135deg, var(--primary) 0%, var(--magic) 100%);
-            border-radius: 10px;
+            border-radius: 12px;
             display: flex; justify-content: center; align-items: center;
-            font-weight: 800; font-size: 20px; color: white;
-            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+            font-weight: 800; font-size: 24px; color: white;
+            box-shadow: 0 4px 20px rgba(168, 85, 247, 0.4);
         }
 
-        .logo-text { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+        .logo-text { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; background: linear-gradient(to right, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
         .stats-box {
-            background: var(--bg-surface);
+            background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 16px;
+            border-radius: 16px;
+            padding: 20px;
             margin-bottom: 24px;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
         }
 
         .stat-item {
             display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 12px; font-size: 14px; color: var(--text-secondary);
+            margin-bottom: 14px; font-size: 14px; color: var(--text-secondary);
+            font-weight: 500;
         }
         .stat-item:last-child { margin-bottom: 0; }
-        .stat-value { font-weight: 700; color: var(--text-primary); font-family: 'Outfit', sans-serif; }
+        .stat-value { font-weight: 700; color: var(--text-primary); font-family: 'Outfit', sans-serif; font-size: 16px; }
 
         /* Main Content */
         .main-content {
@@ -112,172 +126,239 @@
         }
 
         .topbar {
-            padding: 20px 32px;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(12px);
+            padding: 24px 40px;
+            background: rgba(9, 9, 11, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            z-index: 5;
         }
 
-        .filters { display: flex; gap: 12px; }
+        .filters { display: flex; gap: 16px; }
         .search-input, .filter-select {
-            background: rgba(0, 0, 0, 0.05);
-            border: 1px solid var(--border-color);
-            color: var(--text-primary); padding: 10px 16px;
-            border-radius: 8px; font-family: inherit; font-size: 14px;
-            outline: none; transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-primary); padding: 12px 20px;
+            border-radius: 10px; font-family: inherit; font-size: 14px;
+            outline: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
         }
         .search-input:focus, .filter-select:focus {
-            border-color: var(--primary); background: rgba(0, 0, 0, 0.08);
+            border-color: var(--primary); background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
         }
+        .search-input::placeholder { color: #64748b; }
+        .filter-select option { background: var(--bg-base); color: var(--text-primary); }
 
         .btn {
             background: var(--primary); color: white;
-            border: none; padding: 10px 20px; border-radius: 8px;
-            font-weight: 600; font-size: 14px; cursor: pointer;
-            transition: all 0.3s;
-            display: flex; align-items: center; gap: 8px;
+            border: none; padding: 12px 24px; border-radius: 10px;
+            font-weight: 600; font-size: 15px; cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; align-items: center; gap: 10px;
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
         }
-        .btn:hover { background: var(--primary-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3); }
-        .btn-magic { background: linear-gradient(135deg, var(--magic), #d946ef); }
-        .btn-magic:hover { box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4); }
+        .btn:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(14, 165, 233, 0.4); }
+        .btn:active { transform: translateY(0); }
+        
+        .btn-magic { 
+            background: linear-gradient(135deg, var(--magic), #d946ef); 
+            box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .btn-magic:hover { box-shadow: 0 6px 20px rgba(168, 85, 247, 0.5); }
 
         /* Kanban Board */
         .kanban-board {
             display: flex;
-            gap: 20px;
-            padding: 24px 32px;
+            gap: 24px;
+            padding: 32px 40px;
             overflow-x: auto;
             overflow-y: hidden;
             flex: 1;
+            /* Custom Scrollbar for horizontal scroll */
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.2) transparent;
         }
+        .kanban-board::-webkit-scrollbar { height: 8px; }
+        .kanban-board::-webkit-scrollbar-track { background: transparent; }
+        .kanban-board::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+        .kanban-board::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
 
         .kanban-column {
-            flex: 0 0 340px;
+            flex: 0 0 350px;
             display: flex;
             flex-direction: column;
-            background: rgba(255, 255, 255, 0.6);
+            background: var(--bg-surface);
+            backdrop-filter: blur(12px);
             border: 1px solid var(--border-color);
-            border-radius: 16px;
+            border-radius: 20px;
             max-height: 100%;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
         }
 
-        .kanban-column.col-new {
-            flex: 0 0 450px; /* Make New Matches significantly wider */
-        }
+        .kanban-column.col-new { flex: 0 0 380px; } /* Slightly wider for new matches */
 
         .kanban-column.drag-over {
-            background: rgba(0, 0, 0, 0.05);
-            border-style: dashed;
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px dashed var(--primary);
+            transform: scale(1.01);
         }
 
         .col-header {
-            padding: 16px 20px;
+            padding: 20px 24px;
             border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 16px;
-            font-weight: 600;
+            font-size: 17px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
         }
-        .col-count {
-            background: rgba(255, 255, 255, 0.1); padding: 2px 8px;
-            border-radius: 12px; font-size: 12px; font-family: 'Inter';
+        
+        .col-header::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
         }
 
-        .col-new .col-header { border-top: 3px solid var(--col-new-border); border-radius: 16px 16px 0 0; }
-        .col-applied .col-header { border-top: 3px solid var(--col-applied-border); border-radius: 16px 16px 0 0; }
-        .col-interviewing .col-header { border-top: 3px solid var(--col-interview-border); border-radius: 16px 16px 0 0; }
-        .col-offer .col-header { border-top: 3px solid var(--col-offer-border); border-radius: 16px 16px 0 0; }
-        .col-rejected .col-header { border-top: 3px solid var(--col-reject-border); border-radius: 16px 16px 0 0; }
+        .col-count {
+            background: rgba(255, 255, 255, 0.1); padding: 4px 10px;
+            border-radius: 12px; font-size: 13px; font-family: 'Inter';
+            font-weight: 600; box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+
+        .col-new .col-header::before { background: var(--col-new-border); box-shadow: 0 0 15px var(--col-new-border); }
+        .col-applied .col-header::before { background: var(--col-applied-border); box-shadow: 0 0 15px var(--col-applied-border); }
+        .col-interviewing .col-header::before { background: var(--col-interview-border); box-shadow: 0 0 15px var(--col-interview-border); }
+        .col-offer .col-header::before { background: var(--col-offer-border); box-shadow: 0 0 15px var(--col-offer-border); }
+        .col-rejected .col-header::before { background: var(--col-reject-border); box-shadow: 0 0 15px var(--col-reject-border); }
+        .col-archived .col-header::before { background: var(--col-archive-border); box-shadow: 0 0 15px var(--col-archive-border); }
 
         .kanban-cards {
-            padding: 16px;
+            padding: 20px;
             overflow-y: auto;
             flex: 1;
             display: flex;
             flex-direction: column;
             gap: 16px;
+            /* Custom Scrollbar */
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.1) transparent;
         }
+        .kanban-cards::-webkit-scrollbar { width: 6px; }
+        .kanban-cards::-webkit-scrollbar-track { background: transparent; }
+        .kanban-cards::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
 
-        /* Job Card */
+        /* Job Card - Premium Glass */
         .job-card {
-            background: var(--bg-surface);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 18px;
             cursor: grab;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 4px 6px rgba(0,0,0,0.1);
         }
-        .job-card:active { cursor: grabbing; }
+        .job-card:active { cursor: grabbing; transform: scale(0.98); }
         .job-card:hover {
-            transform: translateY(-2px);
+            transform: translateY(-4px);
             border-color: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 12px 24px rgba(0, 0, 0, 0.4);
         }
 
-        .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
-        .job-title { font-size: 15px; font-weight: 600; line-height: 1.3; font-family: 'Outfit'; }
-        .job-company { font-size: 13px; color: var(--text-secondary); margin-bottom: 12px; display: flex; justify-content: space-between; }
+        .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+        .job-title { font-size: 16px; font-weight: 600; line-height: 1.4; font-family: 'Outfit'; color: #fff; }
+        .job-company { font-size: 13px; color: var(--text-secondary); margin-bottom: 16px; display: flex; justify-content: space-between; font-weight: 500; }
         
         .score-badge {
-            background: rgba(255, 255, 255, 0.1); padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 700;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 4px 10px; border-radius: 8px; font-size: 13px; font-weight: 700;
+            color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
+        .score-badge.high { color: var(--magic); }
+        .score-badge.hot { color: var(--warning); }
 
         .card-details {
-            display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;
+            display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px;
         }
         .detail-tag {
-            font-size: 11px; padding: 4px 8px; background: rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.05); border-radius: 6px; color: var(--text-secondary);
+            font-size: 11px; padding: 4px 10px; background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; color: var(--text-secondary);
+            font-weight: 500; letter-spacing: 0.3px;
         }
 
         .card-actions {
-            display: flex; gap: 8px;
+            display: flex; gap: 10px;
         }
         .action-btn {
-            flex: 1; padding: 8px; border-radius: 6px; font-size: 12px; font-weight: 600;
-            border: 1px solid var(--border-color); background: rgba(0,0,0,0.03);
-            color: var(--text-primary); cursor: pointer; transition: 0.2s; text-align: center; text-decoration: none;
+            flex: 1; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03);
+            color: var(--text-primary); cursor: pointer; transition: all 0.2s; text-align: center; text-decoration: none;
+            display: flex; justify-content: center; align-items: center; gap: 6px;
         }
-        .action-btn:hover { background: rgba(0,0,0,0.08); }
-        .action-btn.magic { background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.3); color: #c084fc; }
-        .action-btn.magic:hover { background: rgba(168, 85, 247, 0.2); }
+        .action-btn:hover { background: rgba(255,255,255,0.1); transform: translateY(-1px); }
+        .action-btn.magic { background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.4); color: #e9d5ff; }
+        .action-btn.magic:hover { background: rgba(168, 85, 247, 0.25); box-shadow: 0 0 12px rgba(168, 85, 247, 0.3); }
 
-        /* Modal */
+        /* Modal - Ultra Premium */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px);
+            background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
             display: none; justify-content: center; align-items: center; z-index: 100;
+            opacity: 0; transition: opacity 0.3s ease;
         }
+        .modal-overlay.active { opacity: 1; }
+        
         .modal {
-            background: #0f172a; border: 1px solid var(--border-color);
-            border-radius: 16px; width: 90%; max-width: 800px; max-height: 90vh;
-            display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+            background: #09090b; border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px; width: 90%; max-width: 850px; max-height: 85vh;
+            display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 40px rgba(168, 85, 247, 0.15);
+            transform: translateY(20px) scale(0.95); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+        .modal-overlay.active .modal { transform: translateY(0) scale(1); }
+        
         .modal-header {
-            padding: 20px 24px; border-bottom: 1px solid var(--border-color);
+            padding: 24px 32px; border-bottom: 1px solid rgba(255,255,255,0.08);
             display: flex; justify-content: space-between; align-items: center;
+            background: rgba(255,255,255,0.02); border-radius: 24px 24px 0 0;
         }
-        .modal-title { font-family: 'Outfit'; font-size: 20px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
-        .close-btn { background: none; border: none; color: var(--text-secondary); font-size: 24px; cursor: pointer; }
-        .close-btn:hover { color: var(--text-primary); }
-        .modal-body { padding: 24px; overflow-y: auto; line-height: 1.6; font-size: 14px; color: var(--text-secondary); }
-        .modal-body h3 { color: var(--text-primary); margin-top: 20px; margin-bottom: 10px; font-family: 'Outfit'; }
-        .modal-body pre { white-space: pre-wrap; font-family: 'Inter'; background: #f8fafc; padding: 16px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 20px; color: var(--text-primary); }
-        .modal-body ul { padding-left: 20px; margin-bottom: 20px; }
-        .modal-body li { margin-bottom: 8px; }
+        .modal-title { font-family: 'Outfit'; font-size: 22px; font-weight: 600; display: flex; align-items: center; gap: 12px; color: #fff; }
+        .close-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 18px; cursor: pointer; transition: all 0.2s; }
+        .close-btn:hover { color: #fff; background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.5); transform: rotate(90deg); }
+        
+        .modal-body { padding: 32px; overflow-y: auto; line-height: 1.7; font-size: 15px; color: var(--text-secondary); }
+        .modal-body::-webkit-scrollbar { width: 8px; }
+        .modal-body::-webkit-scrollbar-track { background: transparent; }
+        .modal-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+        
+        .modal-body h3 { color: var(--text-primary); margin-top: 24px; margin-bottom: 12px; font-family: 'Outfit'; font-size: 18px; display: flex; align-items: center; gap: 8px; }
+        .modal-body h3::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--magic); display: inline-block; }
+        .modal-body pre { white-space: pre-wrap; font-family: 'Inter'; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); margin-bottom: 24px; color: #e2e8f0; font-size: 14px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.2); }
+        .modal-body ul { padding-left: 0; margin-bottom: 24px; list-style: none; }
+        .modal-body li { margin-bottom: 12px; padding-left: 24px; position: relative; background: rgba(255,255,255,0.02); padding: 12px 16px 12px 36px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); }
+        .modal-body li::before { content: '🎯'; position: absolute; left: 12px; top: 12px; font-size: 14px; }
 
         /* Loading Spinner */
         .loader {
-            border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid var(--magic);
-            border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite;
+            border: 3px solid rgba(255,255,255,0.05); border-top: 3px solid var(--magic);
+            border-radius: 50%; width: 28px; height: 28px; animation: spin 1s linear infinite;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        /* Empty State */
+        .empty-state {
+            padding: 30px 20px; text-align: center; color: var(--text-secondary); font-size: 14px;
+            display: flex; flex-direction: column; align-items: center; gap: 12px; opacity: 0.5;
+        }
+        .empty-state i { font-size: 32px; }
 
     </style>
 </head>
@@ -285,43 +366,44 @@
 
     <div class="sidebar">
         <div class="logo-area">
-            <div class="logo-icon">J</div>
+            <div class="logo-icon"><i class="fa-solid fa-bolt"></i></div>
             <div class="logo-text">JobHunterAI</div>
         </div>
         
-        <h4 style="margin-bottom: 16px; color: var(--text-secondary); font-size: 12px; text-transform: uppercase; letter-spacing: 1px;">Pipeline Stats</h4>
+        <h4 style="margin-bottom: 16px; color: var(--text-secondary); font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700;">Pipeline Analytics</h4>
         
         <div class="stats-box">
             <div class="stat-item"><span>Total Sourced</span> <span class="stat-value" id="stat-total">0</span></div>
-            <div class="stat-item"><span>New Matches</span> <span class="stat-value" id="stat-new">0</span></div>
+            <div class="stat-item"><span>New Matches</span> <span class="stat-value" style="color: var(--primary)" id="stat-new">0</span></div>
             <div class="stat-item"><span>Applied</span> <span class="stat-value" style="color: var(--warning)" id="stat-applied">0</span></div>
             <div class="stat-item"><span>Interviewing</span> <span class="stat-value" style="color: var(--magic)" id="stat-interviewing">0</span></div>
             <div class="stat-item"><span>Offers</span> <span class="stat-value" style="color: var(--success)" id="stat-offer">0</span></div>
+            <div class="stat-item"><span>Archived</span> <span class="stat-value" style="color: var(--archive)" id="stat-archived">0</span></div>
         </div>
 
         <button class="btn" style="width: 100%; justify-content: center; margin-top: auto;" onclick="triggerScan()">
-            <span id="scan-icon">📡</span> <span id="scan-text">Run Scrapers</span>
+            <span id="scan-icon"><i class="fa-solid fa-radar"></i></span> <span id="scan-text">Run Scrapers</span>
         </button>
     </div>
 
     <div class="main-content">
         <div class="topbar">
             <div class="filters">
-                <input type="text" class="search-input" id="search-box" placeholder="Search jobs..." oninput="renderBoard()">
+                <input type="text" class="search-input" id="search-box" placeholder="🔍 Search jobs, companies..." oninput="renderBoard()">
                 <select class="filter-select" id="priority-filter" onchange="loadJobs()">
-                    <option value="">All Priorities</option>
+                    <option value="">🎯 All Priorities</option>
                     <option value="HOT">🔥 HOT</option>
                     <option value="HIGH">⚡ HIGH</option>
                     <option value="GOOD">🟢 GOOD</option>
                 </select>
                 <select class="filter-select" id="age-filter" onchange="loadJobs()">
-                    <option value="">Any Time</option>
+                    <option value="">🕒 Any Time</option>
                     <option value="7">Last 7 Days</option>
                     <option value="14">Last 14 Days</option>
                 </select>
             </div>
-            <div style="font-size: 13px; color: var(--text-secondary);">
-                Drag and drop cards to update status
+            <div style="font-size: 14px; color: var(--text-secondary); display: flex; align-items: center; gap: 8px; font-weight: 500;">
+                <i class="fa-solid fa-hand-pointer"></i> Drag and drop cards to update status
             </div>
         </div>
 
@@ -329,37 +411,45 @@
             <!-- Columns -->
             <div class="kanban-column col-new" data-status="new" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
                 <div class="col-header">
-                    <span>New Matches</span> <span class="col-count" id="count-new">0</span>
+                    <span>✨ New Matches</span> <span class="col-count" id="count-new">0</span>
                 </div>
                 <div class="kanban-cards" id="col-new-cards"></div>
             </div>
 
             <div class="kanban-column col-applied" data-status="applied" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
                 <div class="col-header">
-                    <span>Applied</span> <span class="col-count" id="count-applied">0</span>
+                    <span>📝 Applied</span> <span class="col-count" id="count-applied">0</span>
                 </div>
                 <div class="kanban-cards" id="col-applied-cards"></div>
             </div>
 
             <div class="kanban-column col-interviewing" data-status="interviewing" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
                 <div class="col-header">
-                    <span>Interviewing</span> <span class="col-count" id="count-interviewing">0</span>
+                    <span>🎙️ Interviewing</span> <span class="col-count" id="count-interviewing">0</span>
                 </div>
                 <div class="kanban-cards" id="col-interviewing-cards"></div>
             </div>
 
             <div class="kanban-column col-offer" data-status="offer" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
                 <div class="col-header">
-                    <span>Offers</span> <span class="col-count" id="count-offer">0</span>
+                    <span>🎉 Offers</span> <span class="col-count" id="count-offer">0</span>
                 </div>
                 <div class="kanban-cards" id="col-offer-cards"></div>
             </div>
 
             <div class="kanban-column col-rejected" data-status="rejected" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
                 <div class="col-header">
-                    <span>Rejected</span> <span class="col-count" id="count-rejected">0</span>
+                    <span>❌ Rejected</span> <span class="col-count" id="count-rejected">0</span>
                 </div>
                 <div class="kanban-cards" id="col-rejected-cards"></div>
+            </div>
+
+            <!-- New Archived Column -->
+            <div class="kanban-column col-archived" data-status="archived" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
+                <div class="col-header">
+                    <span>📦 Archived</span> <span class="col-count" id="count-archived">0</span>
+                </div>
+                <div class="kanban-cards" id="col-archived-cards"></div>
             </div>
         </div>
     </div>
@@ -368,13 +458,14 @@
     <div class="modal-overlay" id="ai-modal">
         <div class="modal">
             <div class="modal-header">
-                <div class="modal-title"><span style="color: var(--magic)">✨</span> AI Application Tailoring</div>
-                <button class="close-btn" onclick="closeModal()">×</button>
+                <div class="modal-title"><span style="color: var(--magic)"><i class="fa-solid fa-wand-magic-sparkles"></i></span> AI Application Tailoring</div>
+                <button class="close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body" id="modal-content">
-                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px;">
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px;">
                     <div class="loader"></div>
-                    <div style="margin-top: 16px; font-family: 'Outfit';">Crafting perfect application materials...</div>
+                    <div style="margin-top: 24px; font-family: 'Outfit'; font-size: 18px; color: #fff;">Crafting perfect application materials...</div>
+                    <div style="margin-top: 8px; font-size: 14px; opacity: 0.7;">This usually takes about 15-30 seconds.</div>
                 </div>
             </div>
         </div>
@@ -397,6 +488,7 @@
                 document.getElementById('stat-applied').innerText = data.applied_jobs || 0;
                 document.getElementById('stat-interviewing').innerText = data.interviewing_jobs || 0;
                 document.getElementById('stat-offer').innerText = data.offer_jobs || 0;
+                document.getElementById('stat-archived').innerText = data.archived_jobs || 0;
             } catch (err) { console.error("Stats error", err); }
         }
 
@@ -410,13 +502,16 @@
             try {
                 const res = await fetch(url);
                 allJobs = await res.json();
+                // If the backend doesn't return archived jobs by default, we need to fetch them.
+                // The current API in /api/jobs might exclude archived unless status is passed, but looking at database_service.py:
+                // list_jobs returns all jobs unless application_status is specified. So it should contain archived.
                 renderBoard();
             } catch (err) { console.error("Jobs error", err); }
         }
 
         function renderBoard() {
             const searchQuery = document.getElementById('search-box').value.toLowerCase().trim();
-            const cols = { new: [], applied: [], interviewing: [], offer: [], rejected: [] };
+            const cols = { new: [], applied: [], interviewing: [], offer: [], rejected: [], archived: [] };
             
             allJobs.forEach(job => {
                 if (searchQuery && !job.title.toLowerCase().includes(searchQuery) && !job.company.toLowerCase().includes(searchQuery)) return;
@@ -426,37 +521,53 @@
 
             Object.keys(cols).forEach(status => {
                 const container = document.getElementById(`col-${status}-cards`);
-                const countEl = document.getElementById(`count-${status}`);
-                countEl.innerText = cols[status].length;
+                if(!container) return; // safety
                 
-                container.innerHTML = cols[status].map(job => `
+                const countEl = document.getElementById(`count-${status}`);
+                if(countEl) countEl.innerText = cols[status].length;
+                
+                if (cols[status].length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fa-solid fa-inbox"></i>
+                            <div>No jobs here yet</div>
+                        </div>`;
+                    return;
+                }
+
+                container.innerHTML = cols[status].map(job => {
+                    let scoreClass = '';
+                    if (job.score >= 80) scoreClass = 'hot';
+                    else if (job.score >= 60) scoreClass = 'high';
+
+                    return `
                     <div class="job-card" id="job-${job.id}" draggable="true" ondragstart="dragStart(event)">
                         <div class="card-top">
                             <div class="job-title">${escapeHtml(job.title)}</div>
-                            <div class="score-badge">${job.score}</div>
+                            <div class="score-badge ${scoreClass}"><i class="fa-solid fa-star" style="font-size: 10px; margin-right: 4px;"></i>${job.score}</div>
                         </div>
                         <div class="job-company">
-                            <span>${escapeHtml(job.company)}</span>
-                            <span>${job.country}</span>
+                            <span><i class="fa-regular fa-building" style="margin-right: 4px; opacity: 0.7;"></i>${escapeHtml(job.company)}</span>
+                            <span><i class="fa-solid fa-globe" style="margin-right: 4px; opacity: 0.7;"></i>${job.country}</span>
                         </div>
                         <div class="card-details">
-                            <span class="detail-tag">${job.source}</span>
-                            <span class="detail-tag">${timeAgo(job.posted_at || job.created_at)}</span>
+                            <span class="detail-tag"><i class="fa-solid fa-rss" style="margin-right: 4px;"></i>${job.source}</span>
+                            <span class="detail-tag"><i class="fa-regular fa-clock" style="margin-right: 4px;"></i>${timeAgo(job.posted_at || job.created_at)}</span>
                         </div>
                         <div class="card-actions">
-                            <button class="action-btn" style="flex: 0 0 auto; color: var(--text-secondary);" onclick="updateStatus(${job.id}, 'archived')" title="Archive">🗑️</button>
-                            <button class="action-btn magic" onclick="generateMaterials(${job.id})">✨ Auto-Tailor</button>
-                            <a href="${job.url}" target="_blank" class="action-btn">View Job</a>
+                            ${status !== 'archived' ? `<button class="action-btn" style="flex: 0 0 40px;" onclick="updateStatus(${job.id}, 'archived')" title="Archive Job"><i class="fa-solid fa-box-archive"></i></button>` : `<button class="action-btn" style="flex: 0 0 40px;" onclick="updateStatus(${job.id}, 'new')" title="Restore Job"><i class="fa-solid fa-arrow-rotate-left"></i></button>`}
+                            <button class="action-btn magic" onclick="generateMaterials(${job.id})"><i class="fa-solid fa-wand-magic-sparkles"></i> Auto-Tailor</button>
+                            <a href="${job.url}" target="_blank" class="action-btn" title="View Original Post"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
                         </div>
                     </div>
-                `).join('');
+                `}).join('');
             });
         }
 
         // Drag and Drop Logic
         function dragStart(e) {
             e.dataTransfer.setData('text/plain', e.target.id);
-            setTimeout(() => e.target.style.opacity = '0.5', 0);
+            setTimeout(() => e.target.style.opacity = '0.4', 0);
         }
 
         function dragEnter(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
@@ -469,35 +580,20 @@
             col.classList.remove('drag-over');
             const cardId = e.dataTransfer.getData('text/plain');
             const card = document.getElementById(cardId);
-            card.style.opacity = '1';
+            if(card) card.style.opacity = '1';
             
             const newStatus = col.getAttribute('data-status');
             const jobId = parseInt(cardId.split('-')[1]);
             
-            const jobIndex = allJobs.findIndex(j => j.id === jobId);
-            if (jobIndex > -1 && allJobs[jobIndex].application_status !== newStatus) {
-                // Optimistic UI update
-                allJobs[jobIndex].application_status = newStatus;
-                renderBoard();
-                
-                // API call
-                try {
-                    await fetch(`/api/jobs/${jobId}/status`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ status: newStatus })
-                    });
-                    loadStats();
-                } catch (err) {
-                    console.error("Update failed", err);
-                    loadJobs(); // Revert on failure
-                }
-            }
+            await updateStatus(jobId, newStatus);
         }
 
         async function updateStatus(jobId, newStatus) {
             const jobIndex = allJobs.findIndex(j => j.id === jobId);
             if (jobIndex > -1) {
+                const oldStatus = allJobs[jobIndex].application_status;
+                if (oldStatus === newStatus) return;
+
                 // Optimistic UI update
                 allJobs[jobIndex].application_status = newStatus;
                 renderBoard();
@@ -512,21 +608,26 @@
                     loadStats();
                 } catch (err) {
                     console.error("Update failed", err);
-                    loadJobs(); // Revert on failure
+                    allJobs[jobIndex].application_status = oldStatus; // Revert
+                    renderBoard();
                 }
             }
         }
 
         // AI Materials Generator
         async function generateMaterials(jobId) {
-            const modal = document.getElementById('ai-modal');
+            const modalOverlay = document.getElementById('ai-modal');
             const content = document.getElementById('modal-content');
-            modal.style.display = 'flex';
+            modalOverlay.style.display = 'flex';
+            
+            // Trigger animation
+            setTimeout(() => { modalOverlay.classList.add('active'); }, 10);
             
             content.innerHTML = `
-                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px;">
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px;">
                     <div class="loader"></div>
-                    <div style="margin-top: 16px; font-family: 'Outfit';">Crafting perfect application materials...</div>
+                    <div style="margin-top: 24px; font-family: 'Outfit'; font-size: 18px; color: #fff;">Crafting perfect application materials...</div>
+                    <div style="margin-top: 8px; font-size: 14px; opacity: 0.7;">This usually takes about 15-30 seconds.</div>
                 </div>
             `;
 
@@ -541,39 +642,76 @@
                 content.innerHTML = `
                     <h3>Tailored Cover Letter</h3>
                     <pre id="cover-letter-text">${escapeHtml(data.cover_letter)}</pre>
-                    <button class="btn btn-magic" style="margin-bottom: 24px;" onclick="copyToClipboard('cover-letter-text')">📋 Copy Cover Letter</button>
+                    <button class="btn btn-magic" style="margin-bottom: 32px;" onclick="copyToClipboard('cover-letter-text', this)">
+                        <i class="fa-regular fa-copy"></i> Copy Cover Letter
+                    </button>
                     
                     <h3>Optimized Resume Bullets</h3>
                     <ul>${bulletsHtml}</ul>
                 `;
             } catch (err) {
-                content.innerHTML = `<div style="color: var(--danger); padding: 20px;">Error: ${err.message}</div>`;
+                content.innerHTML = `
+                    <div style="display: flex; flex-direction: column; align-items: center; padding: 40px; color: var(--danger);">
+                        <i class="fa-solid fa-triangle-exclamation" style="font-size: 48px; margin-bottom: 16px;"></i>
+                        <h3 style="color: var(--danger)">Generation Failed</h3>
+                        <p style="text-align: center; max-width: 400px; color: var(--text-secondary); margin-top: 10px;">${escapeHtml(err.message)}</p>
+                        <p style="text-align: center; font-size: 13px; margin-top: 20px; opacity: 0.6;">Did you add your OPENAI_API_KEY to the environment variables?</p>
+                    </div>
+                `;
             }
         }
 
         function closeModal() {
-            document.getElementById('ai-modal').style.display = 'none';
+            const modalOverlay = document.getElementById('ai-modal');
+            modalOverlay.classList.remove('active');
+            setTimeout(() => { modalOverlay.style.display = 'none'; }, 300); // Wait for transition
         }
 
-        function copyToClipboard(elementId) {
+        function copyToClipboard(elementId, btnElement) {
             const text = document.getElementById(elementId).innerText;
             navigator.clipboard.writeText(text).then(() => {
-                alert('Copied to clipboard!');
+                const originalText = btnElement.innerHTML;
+                btnElement.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+                btnElement.style.background = 'var(--success)';
+                btnElement.style.borderColor = 'var(--success)';
+                btnElement.style.boxShadow = '0 0 15px rgba(16, 185, 129, 0.4)';
+                
+                setTimeout(() => {
+                    btnElement.innerHTML = originalText;
+                    btnElement.style.background = '';
+                    btnElement.style.borderColor = '';
+                    btnElement.style.boxShadow = '';
+                }, 2000);
             });
         }
 
         async function triggerScan() {
             const textEl = document.getElementById('scan-text');
             const iconEl = document.getElementById('scan-icon');
-            textEl.innerText = "Scanning...";
-            iconEl.innerHTML = '<div class="loader" style="width:14px;height:14px;border-width:2px"></div>';
+            textEl.innerText = "Scanning Web...";
+            iconEl.innerHTML = '<div class="loader" style="width:16px;height:16px;border-width:2px;border-top-color:#fff;"></div>';
             
-            await fetch('/api/scan', { method: 'POST' });
-            setTimeout(() => {
-                textEl.innerText = "Run Scrapers";
-                iconEl.innerText = "📡";
-                loadJobs();
-            }, 3000);
+            try {
+                await fetch('/api/scan', { method: 'POST' });
+            } catch (e) {
+                console.error(e);
+            }
+            
+            // Poll for completion instead of hard timeout
+            const interval = setInterval(async () => {
+                try {
+                    const statusRes = await fetch('/api/scan/status');
+                    const statusData = await statusRes.json();
+                    if (!statusData.scanning) {
+                        clearInterval(interval);
+                        textEl.innerText = "Run Scrapers";
+                        iconEl.innerHTML = '<i class="fa-solid fa-radar"></i>';
+                        loadJobs();
+                    }
+                } catch(e) {
+                    clearInterval(interval);
+                }
+            }, 2000);
         }
 
         function escapeHtml(unsafe) {
@@ -595,7 +733,7 @@
             const diffDays = Math.floor(diffHours / 24);
             
             if (diffDays > 0) return diffDays === 1 ? '1 day ago' : `${diffDays} days ago`;
-            if (diffHours > 0) return diffHours === 1 ? '1 hour ago' : `${diffHours} hours ago`;
+            if (diffHours > 0) return diffHours === 1 ? '1 hr ago' : `${diffHours} hrs ago`;
             return 'Just now';
         }
     </script>

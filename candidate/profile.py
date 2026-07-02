@@ -320,6 +320,6 @@ MY_PROFILE = CandidateProfile(
         "0-2 years",
         "no experience",
     ],
-    minimum_score=51,
+    minimum_score=35,
 )
 
