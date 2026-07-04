@@ -1,24 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JobHunterAI ✨ Premium Kanban</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <meta name="description" content="JobHunterAI — AI-powered job application Kanban board. Track applications, generate tailored cover letters and resume bullets with one click.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            /* Premium Dark Mode Palette */
             --bg-base: #09090b;
             --bg-surface: rgba(24, 24, 27, 0.65);
             --bg-surface-hover: rgba(39, 39, 42, 0.8);
             --border-color: rgba(255, 255, 255, 0.1);
             --border-glow: rgba(14, 165, 233, 0.5);
-            
+
             --text-primary: #f8fafc;
             --text-secondary: #94a3b8;
             --text-accent: #38bdf8;
-            
+
             --primary: #0ea5e9;
             --primary-hover: #0284c7;
             --success: #10b981;
@@ -27,24 +30,15 @@
             --magic: #a855f7;
             --archive: #64748b;
 
-            /* Column Colors */
-            --col-new-glow: rgba(14, 165, 233, 0.15);
             --col-new-border: #0ea5e9;
-            
-            --col-applied-glow: rgba(245, 158, 11, 0.15);
             --col-applied-border: #f59e0b;
-            
-            --col-interview-glow: rgba(168, 85, 247, 0.15);
             --col-interview-border: #a855f7;
-            
-            --col-offer-glow: rgba(16, 185, 129, 0.15);
             --col-offer-border: #10b981;
-            
-            --col-reject-glow: rgba(239, 68, 68, 0.15);
             --col-reject-border: #ef4444;
-
-            --col-archive-glow: rgba(100, 116, 139, 0.15);
             --col-archive-border: #64748b;
+
+            --sidebar-width: 270px;
+            --mobile-nav-height: 60px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -56,77 +50,191 @@
             display: flex;
             height: 100vh;
             overflow: hidden;
-            background-image: 
+            background-image:
                 radial-gradient(circle at 10% 20%, rgba(14, 165, 233, 0.15), transparent 30%),
                 radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.15), transparent 30%),
                 radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.05), transparent 50%);
-            background-size: cover;
             background-attachment: fixed;
         }
 
-        h1, h2, h3, h4, h5, h6, .logo-text, .btn, .col-header {
+        h1,h2,h3,h4,h5,h6,.logo-text,.btn,.col-header {
             font-family: 'Outfit', sans-serif;
         }
 
-        /* Sidebar - Glassmorphism */
+        /* ================================================
+           MOBILE TOP NAV (hidden on desktop)
+        ================================================ */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: var(--mobile-nav-height);
+            background: rgba(9, 9, 11, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 300;
+            padding: 0 16px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .mobile-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hamburger {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .hamburger:hover { background: rgba(255,255,255,0.1); }
+
+        .hamburger span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            background: var(--text-primary);
+            border-radius: 2px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: center;
+        }
+
+        .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+        /* Sidebar backdrop */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 150;
+            opacity: 0;
+            transition: opacity 0.35s ease;
+        }
+
+        .sidebar-overlay.active { opacity: 1; }
+
+        /* ================================================
+           SIDEBAR
+        ================================================ */
         .sidebar {
-            width: 280px;
-            background: rgba(9, 9, 11, 0.7);
+            width: var(--sidebar-width);
+            min-width: var(--sidebar-width);
+            background: rgba(9, 9, 11, 0.75);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
             border-right: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
-            padding: 28px;
-            z-index: 10;
-            box-shadow: 4px 0 24px rgba(0,0,0,0.4);
+            padding: 28px 24px;
+            z-index: 200;
+            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.4);
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-shrink: 0;
+            overflow-y: auto;
         }
 
         .logo-area {
             display: flex;
             align-items: center;
             gap: 14px;
-            margin-bottom: 48px;
+            margin-bottom: 40px;
         }
 
         .logo-icon {
-            width: 42px; height: 42px;
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
             background: linear-gradient(135deg, var(--primary) 0%, var(--magic) 100%);
             border-radius: 12px;
-            display: flex; justify-content: center; align-items: center;
-            font-weight: 800; font-size: 24px; color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 800;
+            font-size: 22px;
+            color: white;
             box-shadow: 0 4px 20px rgba(168, 85, 247, 0.4);
         }
 
-        .logo-text { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; background: linear-gradient(to right, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .logo-text {
+            font-size: 21px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sidebar-section-label {
+            margin-bottom: 14px;
+            color: var(--text-secondary);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+        }
 
         .stats-box {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--border-color);
             border-radius: 16px;
-            padding: 20px;
+            padding: 18px;
             margin-bottom: 24px;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
         }
 
         .stat-item {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 14px; font-size: 14px; color: var(--text-secondary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 13px;
+            font-size: 14px;
+            color: var(--text-secondary);
             font-weight: 500;
         }
-        .stat-item:last-child { margin-bottom: 0; }
-        .stat-value { font-weight: 700; color: var(--text-primary); font-family: 'Outfit', sans-serif; font-size: 16px; }
 
-        /* Main Content */
+        .stat-item:last-child { margin-bottom: 0; }
+
+        .stat-value {
+            font-weight: 700;
+            color: var(--text-primary);
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+        }
+
+        /* ================================================
+           MAIN CONTENT
+        ================================================ */
         .main-content {
             flex: 1;
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            min-width: 0;
         }
 
+        /* ================================================
+           TOPBAR
+        ================================================ */
         .topbar {
-            padding: 24px 40px;
+            padding: 16px 28px;
             background: rgba(9, 9, 11, 0.4);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
@@ -134,62 +242,155 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 16px;
             z-index: 5;
+            flex-shrink: 0;
         }
 
-        .filters { display: flex; gap: 16px; }
-        .search-input, .filter-select {
+        .filters {
+            display: flex;
+            gap: 10px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .search-input,
+        .filter-select {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--text-primary); padding: 12px 20px;
-            border-radius: 10px; font-family: inherit; font-size: 14px;
-            outline: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--text-primary);
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
         }
-        .search-input:focus, .filter-select:focus {
-            border-color: var(--primary); background: rgba(255, 255, 255, 0.08);
+
+        .search-input { flex: 1; min-width: 140px; }
+        .filter-select { min-width: 120px; }
+
+        .search-input:focus,
+        .filter-select:focus {
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.08);
             box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
         }
+
         .search-input::placeholder { color: #64748b; }
-        .filter-select option { background: var(--bg-base); color: var(--text-primary); }
+
+        .filter-select option {
+            background: var(--bg-base);
+            color: var(--text-primary);
+        }
+
+        .topbar-hint {
+            font-size: 13px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
 
         .btn {
-            background: var(--primary); color: white;
-            border: none; padding: 12px 24px; border-radius: 10px;
-            font-weight: 600; font-size: 15px; cursor: pointer;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex; align-items: center; gap: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
             box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+            white-space: nowrap;
         }
-        .btn:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(14, 165, 233, 0.4); }
+
+        .btn:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(14, 165, 233, 0.4);
+        }
+
         .btn:active { transform: translateY(0); }
-        
-        .btn-magic { 
-            background: linear-gradient(135deg, var(--magic), #d946ef); 
+
+        .btn-magic {
+            background: linear-gradient(135deg, var(--magic), #d946ef);
             box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
+
         .btn-magic:hover { box-shadow: 0 6px 20px rgba(168, 85, 247, 0.5); }
 
-        /* Kanban Board */
+        /* ================================================
+           MOBILE STATS STRIP
+        ================================================ */
+        .mobile-stats-strip {
+            display: none;
+            padding: 10px 12px;
+            background: rgba(9, 9, 11, 0.6);
+            border-bottom: 1px solid var(--border-color);
+            gap: 8px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+            flex-shrink: 0;
+        }
+
+        .mobile-stats-strip::-webkit-scrollbar { display: none; }
+
+        .mobile-stat-chip {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 5px 12px;
+            white-space: nowrap;
+            font-size: 12px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .mobile-stat-chip .label {
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        /* ================================================
+           KANBAN BOARD
+        ================================================ */
         .kanban-board {
             display: flex;
-            gap: 24px;
-            padding: 32px 40px;
+            gap: 18px;
+            padding: 24px 28px;
             overflow-x: auto;
             overflow-y: hidden;
             flex: 1;
-            /* Custom Scrollbar for horizontal scroll */
             scrollbar-width: thin;
             scrollbar-color: rgba(255,255,255,0.2) transparent;
+            scroll-snap-type: x proximity;
+            -webkit-overflow-scrolling: touch;
         }
-        .kanban-board::-webkit-scrollbar { height: 8px; }
+
+        .kanban-board::-webkit-scrollbar { height: 6px; }
         .kanban-board::-webkit-scrollbar-track { background: transparent; }
-        .kanban-board::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+        .kanban-board::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.18);
+            border-radius: 4px;
+        }
         .kanban-board::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
 
         .kanban-column {
-            flex: 0 0 350px;
+            flex: 0 0 320px;
             display: flex;
             flex-direction: column;
             background: var(--bg-surface);
@@ -199,37 +400,47 @@
             max-height: 100%;
             transition: all 0.3s ease;
             box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            scroll-snap-align: start;
         }
 
-        .kanban-column.col-new { flex: 0 0 380px; } /* Slightly wider for new matches */
+        .kanban-column.col-new { flex: 0 0 340px; }
 
         .kanban-column.drag-over {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255,255,255,0.08);
             border: 2px dashed var(--primary);
             transform: scale(1.01);
         }
 
         .col-header {
-            padding: 20px 24px;
+            padding: 18px 20px;
             border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 17px;
+            font-size: 15px;
             font-weight: 700;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.4px;
             position: relative;
             overflow: hidden;
+            flex-shrink: 0;
         }
-        
+
         .col-header::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 4px;
         }
 
         .col-count {
-            background: rgba(255, 255, 255, 0.1); padding: 4px 10px;
-            border-radius: 12px; font-size: 13px; font-family: 'Inter';
-            font-weight: 600; box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.1);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-family: 'Inter';
+            font-weight: 600;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
         }
 
         .col-new .col-header::before { background: var(--col-new-border); box-shadow: 0 0 15px var(--col-new-border); }
@@ -240,138 +451,456 @@
         .col-archived .col-header::before { background: var(--col-archive-border); box-shadow: 0 0 15px var(--col-archive-border); }
 
         .kanban-cards {
-            padding: 20px;
+            padding: 14px;
             overflow-y: auto;
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 16px;
-            /* Custom Scrollbar */
+            gap: 12px;
             scrollbar-width: thin;
             scrollbar-color: rgba(255,255,255,0.1) transparent;
         }
-        .kanban-cards::-webkit-scrollbar { width: 6px; }
-        .kanban-cards::-webkit-scrollbar-track { background: transparent; }
-        .kanban-cards::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
 
-        /* Job Card - Premium Glass */
+        .kanban-cards::-webkit-scrollbar { width: 4px; }
+        .kanban-cards::-webkit-scrollbar-track { background: transparent; }
+        .kanban-cards::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+
+        /* ================================================
+           JOB CARD
+        ================================================ */
         .job-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
             border-radius: 14px;
-            padding: 18px;
+            padding: 15px;
             cursor: grab;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 4px 6px rgba(0,0,0,0.1);
         }
+
         .job-card:active { cursor: grabbing; transform: scale(0.98); }
+
         .job-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.06);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 12px 24px rgba(0, 0, 0, 0.4);
+            transform: translateY(-3px);
+            border-color: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.06);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 10px 20px rgba(0,0,0,0.4);
         }
 
-        .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
-        .job-title { font-size: 16px; font-weight: 600; line-height: 1.4; font-family: 'Outfit'; color: #fff; }
-        .job-company { font-size: 13px; color: var(--text-secondary); margin-bottom: 16px; display: flex; justify-content: space-between; font-weight: 500; }
-        
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+            gap: 8px;
+        }
+
+        .job-title {
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.4;
+            font-family: 'Outfit';
+            color: #fff;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .job-company {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            font-weight: 500;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
         .score-badge {
             background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
             border: 1px solid rgba(255,255,255,0.1);
-            padding: 4px 10px; border-radius: 8px; font-size: 13px; font-weight: 700;
-            color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            padding: 4px 9px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--primary);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            white-space: nowrap;
+            flex-shrink: 0;
         }
+
         .score-badge.high { color: var(--magic); }
         .score-badge.hot { color: var(--warning); }
 
         .card-details {
-            display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 13px;
         }
+
         .detail-tag {
-            font-size: 11px; padding: 4px 10px; background: rgba(0,0,0,0.4);
-            border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; color: var(--text-secondary);
-            font-weight: 500; letter-spacing: 0.3px;
+            font-size: 11px;
+            padding: 4px 9px;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            letter-spacing: 0.3px;
         }
 
         .card-actions {
-            display: flex; gap: 10px;
+            display: flex;
+            gap: 7px;
         }
-        .action-btn {
-            flex: 1; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 600;
-            border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03);
-            color: var(--text-primary); cursor: pointer; transition: all 0.2s; text-align: center; text-decoration: none;
-            display: flex; justify-content: center; align-items: center; gap: 6px;
-        }
-        .action-btn:hover { background: rgba(255,255,255,0.1); transform: translateY(-1px); }
-        .action-btn.magic { background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.4); color: #e9d5ff; }
-        .action-btn.magic:hover { background: rgba(168, 85, 247, 0.25); box-shadow: 0 0 12px rgba(168, 85, 247, 0.3); }
 
-        /* Modal - Ultra Premium */
+        .action-btn {
+            flex: 1;
+            padding: 9px 7px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.03);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            text-decoration: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            min-width: 0;
+        }
+
+        .action-btn:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-1px);
+        }
+
+        .action-btn.magic {
+            background: rgba(168, 85, 247, 0.15);
+            border-color: rgba(168, 85, 247, 0.4);
+            color: #e9d5ff;
+        }
+
+        .action-btn.magic:hover {
+            background: rgba(168, 85, 247, 0.25);
+            box-shadow: 0 0 12px rgba(168, 85, 247, 0.3);
+        }
+
+        /* ================================================
+           MODAL
+        ================================================ */
         .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-            display: none; justify-content: center; align-items: center; z-index: 100;
-            opacity: 0; transition: opacity 0.3s ease;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 500;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            padding: 16px;
         }
+
         .modal-overlay.active { opacity: 1; }
-        
+
         .modal {
-            background: #09090b; border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 24px; width: 90%; max-width: 850px; max-height: 85vh;
-            display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 40px rgba(168, 85, 247, 0.15);
-            transform: translateY(20px) scale(0.95); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: #09090b;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 850px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8), 0 0 40px rgba(168, 85, 247, 0.15);
+            transform: translateY(20px) scale(0.95);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+
         .modal-overlay.active .modal { transform: translateY(0) scale(1); }
-        
+
         .modal-header {
-            padding: 24px 32px; border-bottom: 1px solid rgba(255,255,255,0.08);
-            display: flex; justify-content: space-between; align-items: center;
-            background: rgba(255,255,255,0.02); border-radius: 24px 24px 0 0;
+            padding: 20px 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.02);
+            border-radius: 24px 24px 0 0;
+            flex-shrink: 0;
         }
-        .modal-title { font-family: 'Outfit'; font-size: 22px; font-weight: 600; display: flex; align-items: center; gap: 12px; color: #fff; }
-        .close-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 18px; cursor: pointer; transition: all 0.2s; }
-        .close-btn:hover { color: #fff; background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.5); transform: rotate(90deg); }
-        
-        .modal-body { padding: 32px; overflow-y: auto; line-height: 1.7; font-size: 15px; color: var(--text-secondary); }
-        .modal-body::-webkit-scrollbar { width: 8px; }
+
+        .modal-title {
+            font-family: 'Outfit';
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #fff;
+        }
+
+        .close-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-secondary);
+            width: 36px;
+            height: 36px;
+            min-width: 36px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .close-btn:hover {
+            color: #fff;
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.5);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 24px;
+            overflow-y: auto;
+            line-height: 1.7;
+            font-size: 15px;
+            color: var(--text-secondary);
+            flex: 1;
+        }
+
+        .modal-body::-webkit-scrollbar { width: 6px; }
         .modal-body::-webkit-scrollbar-track { background: transparent; }
         .modal-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
-        
-        .modal-body h3 { color: var(--text-primary); margin-top: 24px; margin-bottom: 12px; font-family: 'Outfit'; font-size: 18px; display: flex; align-items: center; gap: 8px; }
-        .modal-body h3::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--magic); display: inline-block; }
-        .modal-body pre { white-space: pre-wrap; font-family: 'Inter'; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); margin-bottom: 24px; color: #e2e8f0; font-size: 14px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.2); }
-        .modal-body ul { padding-left: 0; margin-bottom: 24px; list-style: none; }
-        .modal-body li { margin-bottom: 12px; padding-left: 24px; position: relative; background: rgba(255,255,255,0.02); padding: 12px 16px 12px 36px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); }
-        .modal-body li::before { content: '🎯'; position: absolute; left: 12px; top: 12px; font-size: 14px; }
 
-        /* Loading Spinner */
+        .modal-body h3 {
+            color: var(--text-primary);
+            margin-top: 24px;
+            margin-bottom: 12px;
+            font-family: 'Outfit';
+            font-size: 17px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-body h3::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--magic);
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        .modal-body pre {
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-family: 'Inter';
+            background: rgba(0,0,0,0.3);
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 20px;
+            color: #e2e8f0;
+            font-size: 14px;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .modal-body ul {
+            padding-left: 0;
+            margin-bottom: 24px;
+            list-style: none;
+        }
+
+        .modal-body li {
+            margin-bottom: 10px;
+            padding: 12px 16px 12px 36px;
+            position: relative;
+            background: rgba(255,255,255,0.02);
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .modal-body li::before {
+            content: '🎯';
+            position: absolute;
+            left: 12px;
+            top: 12px;
+            font-size: 14px;
+        }
+
+        /* ================================================
+           LOADER
+        ================================================ */
         .loader {
-            border: 3px solid rgba(255,255,255,0.05); border-top: 3px solid var(--magic);
-            border-radius: 50%; width: 28px; height: 28px; animation: spin 1s linear infinite;
+            border: 3px solid rgba(255,255,255,0.05);
+            border-top: 3px solid var(--magic);
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            animation: spin 1s linear infinite;
         }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        /* Empty State */
-        .empty-state {
-            padding: 30px 20px; text-align: center; color: var(--text-secondary); font-size: 14px;
-            display: flex; flex-direction: column; align-items: center; gap: 12px; opacity: 0.5;
-        }
-        .empty-state i { font-size: 32px; }
 
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ================================================
+           EMPTY STATE
+        ================================================ */
+        .empty-state {
+            padding: 30px 16px;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            opacity: 0.5;
+        }
+
+        .empty-state i { font-size: 26px; }
+
+        /* ================================================
+           RESPONSIVE BREAKPOINTS
+        ================================================ */
+
+        /* Tablet + Mobile: <= 900px */
+        @media (max-width: 900px) {
+            body { overflow: hidden; }
+
+            .sidebar {
+                position: fixed;
+                top: 0; left: 0;
+                height: 100vh;
+                transform: translateX(-100%);
+                z-index: 200;
+            }
+
+            .sidebar.open { transform: translateX(0); }
+
+            .sidebar-overlay { display: block; }
+
+            .mobile-nav { display: flex; }
+
+            .main-content { padding-top: var(--mobile-nav-height); }
+
+            .topbar {
+                padding: 12px 14px;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .topbar-hint { display: none; }
+
+            .filters {
+                width: 100%;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .search-input {
+                width: 100%;
+                min-width: unset;
+                flex: unset;
+            }
+
+            .filter-select {
+                flex: 1;
+                min-width: 100px;
+            }
+
+            .mobile-stats-strip { display: flex; }
+
+            .kanban-board {
+                padding: 14px 12px;
+                gap: 12px;
+            }
+
+            .kanban-column { flex: 0 0 280px; }
+            .kanban-column.col-new { flex: 0 0 295px; }
+        }
+
+        /* Small Mobile: <= 600px */
+        @media (max-width: 600px) {
+            .topbar { padding: 10px 12px; }
+
+            .filter-select { font-size: 13px; padding: 8px 10px; }
+            .search-input { font-size: 14px; padding: 8px 12px; }
+
+            .kanban-board { padding: 10px; gap: 10px; }
+            .kanban-column { flex: 0 0 260px; }
+            .kanban-column.col-new { flex: 0 0 272px; }
+
+            .col-header { padding: 13px 15px; font-size: 14px; }
+            .kanban-cards { padding: 11px; gap: 10px; }
+            .job-card { padding: 13px; }
+            .job-title { font-size: 14px; }
+
+            .action-btn { padding: 8px 5px; font-size: 11px; gap: 4px; }
+
+            .modal { border-radius: 18px; max-height: 92vh; }
+            .modal-header { padding: 15px 16px; }
+            .modal-title { font-size: 16px; }
+            .modal-body { padding: 14px; font-size: 14px; }
+            .modal-body pre { font-size: 13px; padding: 12px; }
+            .modal-body h3 { font-size: 15px; }
+        }
+
+        /* Very small: <= 380px */
+        @media (max-width: 380px) {
+            .kanban-column { flex: 0 0 242px; }
+            .kanban-column.col-new { flex: 0 0 254px; }
+        }
     </style>
 </head>
+
 <body>
 
-    <div class="sidebar">
+    <!-- Mobile top nav (shown <=900px) -->
+    <nav class="mobile-nav" id="mobile-nav">
+        <div class="mobile-logo">
+            <div class="logo-icon"><i class="fa-solid fa-bolt"></i></div>
+            <div class="logo-text">JobHunterAI</div>
+        </div>
+        <button class="hamburger" id="hamburger" onclick="toggleSidebar()" aria-label="Toggle menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <!-- Sidebar overlay backdrop -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
         <div class="logo-area">
             <div class="logo-icon"><i class="fa-solid fa-bolt"></i></div>
             <div class="logo-text">JobHunterAI</div>
         </div>
-        
-        <h4 style="margin-bottom: 16px; color: var(--text-secondary); font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700;">Pipeline Analytics</h4>
-        
+
+        <h4 class="sidebar-section-label">Pipeline Analytics</h4>
+
         <div class="stats-box">
             <div class="stat-item"><span>Total Sourced</span> <span class="stat-value" id="stat-total">0</span></div>
             <div class="stat-item"><span>New Matches</span> <span class="stat-value" style="color: var(--primary)" id="stat-new">0</span></div>
@@ -382,14 +911,19 @@
         </div>
 
         <button class="btn" style="width: 100%; justify-content: center; margin-top: auto;" onclick="triggerScan()">
-            <span id="scan-icon"><i class="fa-solid fa-radar"></i></span> <span id="scan-text">Run Scrapers</span>
+            <span id="scan-icon"><i class="fa-solid fa-radar"></i></span>
+            <span id="scan-text">Run Scrapers</span>
         </button>
-    </div>
+    </aside>
 
+    <!-- Main content area -->
     <div class="main-content">
-        <div class="topbar">
+
+        <!-- Topbar -->
+        <header class="topbar">
             <div class="filters">
-                <input type="text" class="search-input" id="search-box" placeholder="🔍 Search jobs, companies..." oninput="renderBoard()">
+                <input type="text" class="search-input" id="search-box" placeholder="🔍 Search jobs, companies..."
+                    oninput="renderBoard()" autocomplete="off">
                 <select class="filter-select" id="priority-filter" onchange="loadJobs()">
                     <option value="">🎯 All Priorities</option>
                     <option value="HOT">🔥 HOT</option>
@@ -402,70 +936,108 @@
                     <option value="14">Last 14 Days</option>
                 </select>
             </div>
-            <div style="font-size: 14px; color: var(--text-secondary); display: flex; align-items: center; gap: 8px; font-weight: 500;">
+            <div class="topbar-hint">
                 <i class="fa-solid fa-hand-pointer"></i> Drag and drop cards to update status
+            </div>
+        </header>
+
+        <!-- Mobile stats strip -->
+        <div class="mobile-stats-strip" id="mobile-stats-strip">
+            <div class="mobile-stat-chip">
+                <span class="label">Total</span>
+                <span id="mob-stat-total" style="color: var(--text-primary)">0</span>
+            </div>
+            <div class="mobile-stat-chip">
+                <span class="label">New</span>
+                <span id="mob-stat-new" style="color: var(--primary)">0</span>
+            </div>
+            <div class="mobile-stat-chip">
+                <span class="label">Applied</span>
+                <span id="mob-stat-applied" style="color: var(--warning)">0</span>
+            </div>
+            <div class="mobile-stat-chip">
+                <span class="label">Interview</span>
+                <span id="mob-stat-interviewing" style="color: var(--magic)">0</span>
+            </div>
+            <div class="mobile-stat-chip">
+                <span class="label">Offers</span>
+                <span id="mob-stat-offer" style="color: var(--success)">0</span>
+            </div>
+            <div class="mobile-stat-chip">
+                <span class="label">Archived</span>
+                <span id="mob-stat-archived" style="color: var(--archive)">0</span>
             </div>
         </div>
 
-        <div class="kanban-board">
-            <!-- Columns -->
-            <div class="kanban-column col-new" data-status="new" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
+        <!-- Kanban board -->
+        <main class="kanban-board" id="kanban-board">
+            <div class="kanban-column col-new" data-status="new" ondrop="drop(event)" ondragover="allowDrop(event)"
+                ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
                 <div class="col-header">
                     <span>✨ New Matches</span> <span class="col-count" id="count-new">0</span>
                 </div>
                 <div class="kanban-cards" id="col-new-cards"></div>
             </div>
 
-            <div class="kanban-column col-applied" data-status="applied" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
+            <div class="kanban-column col-applied" data-status="applied" ondrop="drop(event)"
+                ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
                 <div class="col-header">
                     <span>📝 Applied</span> <span class="col-count" id="count-applied">0</span>
                 </div>
                 <div class="kanban-cards" id="col-applied-cards"></div>
             </div>
 
-            <div class="kanban-column col-interviewing" data-status="interviewing" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
+            <div class="kanban-column col-interviewing" data-status="interviewing" ondrop="drop(event)"
+                ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
                 <div class="col-header">
                     <span>🎙️ Interviewing</span> <span class="col-count" id="count-interviewing">0</span>
                 </div>
                 <div class="kanban-cards" id="col-interviewing-cards"></div>
             </div>
 
-            <div class="kanban-column col-offer" data-status="offer" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
+            <div class="kanban-column col-offer" data-status="offer" ondrop="drop(event)" ondragover="allowDrop(event)"
+                ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
                 <div class="col-header">
                     <span>🎉 Offers</span> <span class="col-count" id="count-offer">0</span>
                 </div>
                 <div class="kanban-cards" id="col-offer-cards"></div>
             </div>
 
-            <div class="kanban-column col-rejected" data-status="rejected" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
+            <div class="kanban-column col-rejected" data-status="rejected" ondrop="drop(event)"
+                ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
                 <div class="col-header">
                     <span>❌ Rejected</span> <span class="col-count" id="count-rejected">0</span>
                 </div>
                 <div class="kanban-cards" id="col-rejected-cards"></div>
             </div>
 
-            <!-- New Archived Column -->
-            <div class="kanban-column col-archived" data-status="archived" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
+            <div class="kanban-column col-archived" data-status="archived" ondrop="drop(event)"
+                ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
                 <div class="col-header">
                     <span>📦 Archived</span> <span class="col-count" id="count-archived">0</span>
                 </div>
                 <div class="kanban-cards" id="col-archived-cards"></div>
             </div>
-        </div>
+        </main>
     </div>
 
     <!-- AI Modal -->
-    <div class="modal-overlay" id="ai-modal">
+    <div class="modal-overlay" id="ai-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title-label">
         <div class="modal">
             <div class="modal-header">
-                <div class="modal-title"><span style="color: var(--magic)"><i class="fa-solid fa-wand-magic-sparkles"></i></span> AI Application Tailoring</div>
-                <button class="close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+                <div class="modal-title" id="modal-title-label">
+                    <span style="color: var(--magic)"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+                    AI Application Tailoring
+                </div>
+                <button class="close-btn" onclick="closeModal()" aria-label="Close modal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
             </div>
             <div class="modal-body" id="modal-content">
-                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px;">
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px;">
                     <div class="loader"></div>
-                    <div style="margin-top: 24px; font-family: 'Outfit'; font-size: 18px; color: #fff;">Crafting perfect application materials...</div>
-                    <div style="margin-top: 8px; font-size: 14px; opacity: 0.7;">This usually takes about 15-30 seconds.</div>
+                    <div style="margin-top: 24px; font-family: 'Outfit'; font-size: 18px; color: #fff; text-align: center;">Crafting perfect application materials...</div>
+                    <div style="margin-top: 8px; font-size: 14px; opacity: 0.7; text-align: center;">This usually takes about 15-30 seconds.</div>
                 </div>
             </div>
         </div>
@@ -473,7 +1045,40 @@
 
     <script>
         let allJobs = [];
-        
+
+        /* ---- Sidebar toggle (mobile) ---- */
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const hamburger = document.getElementById('hamburger');
+            const isOpen = sidebar.classList.contains('open');
+            if (isOpen) {
+                closeSidebar();
+            } else {
+                sidebar.classList.add('open');
+                overlay.classList.add('active');
+                hamburger.classList.add('open');
+                hamburger.setAttribute('aria-expanded', 'true');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const hamburger = document.getElementById('hamburger');
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+            hamburger.classList.remove('open');
+            hamburger.setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') { closeSidebar(); closeModal(); }
+        });
+
+        /* ---- Page Init ---- */
         document.addEventListener('DOMContentLoaded', () => {
             loadStats();
             loadJobs();
@@ -483,12 +1088,20 @@
             try {
                 const res = await fetch('/api/stats');
                 const data = await res.json();
+                // Sidebar
                 document.getElementById('stat-total').innerText = data.total_jobs || 0;
                 document.getElementById('stat-new').innerText = data.new_jobs || 0;
                 document.getElementById('stat-applied').innerText = data.applied_jobs || 0;
                 document.getElementById('stat-interviewing').innerText = data.interviewing_jobs || 0;
                 document.getElementById('stat-offer').innerText = data.offer_jobs || 0;
                 document.getElementById('stat-archived').innerText = data.archived_jobs || 0;
+                // Mobile strip
+                document.getElementById('mob-stat-total').innerText = data.total_jobs || 0;
+                document.getElementById('mob-stat-new').innerText = data.new_jobs || 0;
+                document.getElementById('mob-stat-applied').innerText = data.applied_jobs || 0;
+                document.getElementById('mob-stat-interviewing').innerText = data.interviewing_jobs || 0;
+                document.getElementById('mob-stat-offer').innerText = data.offer_jobs || 0;
+                document.getElementById('mob-stat-archived').innerText = data.archived_jobs || 0;
             } catch (err) { console.error("Stats error", err); }
         }
 
@@ -502,9 +1115,6 @@
             try {
                 const res = await fetch(url);
                 allJobs = await res.json();
-                // If the backend doesn't return archived jobs by default, we need to fetch them.
-                // The current API in /api/jobs might exclude archived unless status is passed, but looking at database_service.py:
-                // list_jobs returns all jobs unless application_status is specified. So it should contain archived.
                 renderBoard();
             } catch (err) { console.error("Jobs error", err); }
         }
@@ -512,7 +1122,7 @@
         function renderBoard() {
             const searchQuery = document.getElementById('search-box').value.toLowerCase().trim();
             const cols = { new: [], applied: [], interviewing: [], offer: [], rejected: [], archived: [] };
-            
+
             allJobs.forEach(job => {
                 if (searchQuery && !job.title.toLowerCase().includes(searchQuery) && !job.company.toLowerCase().includes(searchQuery)) return;
                 const status = job.application_status || 'new';
@@ -521,11 +1131,11 @@
 
             Object.keys(cols).forEach(status => {
                 const container = document.getElementById(`col-${status}-cards`);
-                if(!container) return; // safety
-                
+                if (!container) return;
+
                 const countEl = document.getElementById(`count-${status}`);
-                if(countEl) countEl.innerText = cols[status].length;
-                
+                if (countEl) countEl.innerText = cols[status].length;
+
                 if (cols[status].length === 0) {
                     container.innerHTML = `
                         <div class="empty-state">
@@ -544,7 +1154,7 @@
                     <div class="job-card" id="job-${job.id}" draggable="true" ondragstart="dragStart(event)">
                         <div class="card-top">
                             <div class="job-title">${escapeHtml(job.title)}</div>
-                            <div class="score-badge ${scoreClass}"><i class="fa-solid fa-star" style="font-size: 10px; margin-right: 4px;"></i>${job.score}</div>
+                            <div class="score-badge ${scoreClass}"><i class="fa-solid fa-star" style="font-size: 10px; margin-right: 3px;"></i>${job.score}</div>
                         </div>
                         <div class="job-company">
                             <span><i class="fa-regular fa-building" style="margin-right: 4px; opacity: 0.7;"></i>${escapeHtml(job.company)}</span>
@@ -555,16 +1165,18 @@
                             <span class="detail-tag"><i class="fa-regular fa-clock" style="margin-right: 4px;"></i>${timeAgo(job.posted_at || job.created_at)}</span>
                         </div>
                         <div class="card-actions">
-                            ${status !== 'archived' ? `<button class="action-btn" style="flex: 0 0 40px;" onclick="updateStatus(${job.id}, 'archived')" title="Archive Job"><i class="fa-solid fa-box-archive"></i></button>` : `<button class="action-btn" style="flex: 0 0 40px;" onclick="updateStatus(${job.id}, 'new')" title="Restore Job"><i class="fa-solid fa-arrow-rotate-left"></i></button>`}
+                            ${status !== 'archived'
+                                ? `<button class="action-btn" style="flex: 0 0 36px;" onclick="updateStatus(${job.id}, 'archived')" title="Archive Job"><i class="fa-solid fa-box-archive"></i></button>`
+                                : `<button class="action-btn" style="flex: 0 0 36px;" onclick="updateStatus(${job.id}, 'new')" title="Restore Job"><i class="fa-solid fa-arrow-rotate-left"></i></button>`}
                             <button class="action-btn magic" onclick="generateMaterials(${job.id})"><i class="fa-solid fa-wand-magic-sparkles"></i> Auto-Tailor</button>
-                            <a href="${job.url}" target="_blank" class="action-btn" title="View Original Post"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                            <a href="${job.url}" target="_blank" rel="noopener" class="action-btn" style="flex: 0 0 36px;" title="View Original Post"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
                         </div>
                     </div>
                 `}).join('');
             });
         }
 
-        // Drag and Drop Logic
+        /* ---- Drag and Drop ---- */
         function dragStart(e) {
             e.dataTransfer.setData('text/plain', e.target.id);
             setTimeout(() => e.target.style.opacity = '0.4', 0);
@@ -580,11 +1192,10 @@
             col.classList.remove('drag-over');
             const cardId = e.dataTransfer.getData('text/plain');
             const card = document.getElementById(cardId);
-            if(card) card.style.opacity = '1';
-            
+            if (card) card.style.opacity = '1';
+
             const newStatus = col.getAttribute('data-status');
             const jobId = parseInt(cardId.split('-')[1]);
-            
             await updateStatus(jobId, newStatus);
         }
 
@@ -594,11 +1205,9 @@
                 const oldStatus = allJobs[jobIndex].application_status;
                 if (oldStatus === newStatus) return;
 
-                // Optimistic UI update
                 allJobs[jobIndex].application_status = newStatus;
                 renderBoard();
-                
-                // API call
+
                 try {
                     await fetch(`/api/jobs/${jobId}/status`, {
                         method: 'POST',
@@ -608,50 +1217,47 @@
                     loadStats();
                 } catch (err) {
                     console.error("Update failed", err);
-                    allJobs[jobIndex].application_status = oldStatus; // Revert
+                    allJobs[jobIndex].application_status = oldStatus;
                     renderBoard();
                 }
             }
         }
 
-        // AI Materials Generator
+        /* ---- AI Materials Generator ---- */
         async function generateMaterials(jobId) {
             const modalOverlay = document.getElementById('ai-modal');
             const content = document.getElementById('modal-content');
             modalOverlay.style.display = 'flex';
-            
-            // Trigger animation
             setTimeout(() => { modalOverlay.classList.add('active'); }, 10);
-            
+
             content.innerHTML = `
-                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px;">
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px;">
                     <div class="loader"></div>
-                    <div style="margin-top: 24px; font-family: 'Outfit'; font-size: 18px; color: #fff;">Crafting perfect application materials...</div>
-                    <div style="margin-top: 8px; font-size: 14px; opacity: 0.7;">This usually takes about 15-30 seconds.</div>
+                    <div style="margin-top: 24px; font-family: 'Outfit'; font-size: 18px; color: #fff; text-align: center;">Crafting perfect application materials...</div>
+                    <div style="margin-top: 8px; font-size: 14px; opacity: 0.7; text-align: center;">This usually takes about 15-30 seconds.</div>
                 </div>
             `;
 
             try {
                 const res = await fetch(`/api/jobs/${jobId}/generate_materials`, { method: 'POST' });
                 const data = await res.json();
-                
+
                 if (data.error) throw new Error(data.error);
 
                 const bulletsHtml = data.resume_bullets.map(b => `<li>${escapeHtml(b)}</li>`).join('');
-                
+
                 content.innerHTML = `
                     <h3>Tailored Cover Letter</h3>
                     <pre id="cover-letter-text">${escapeHtml(data.cover_letter)}</pre>
                     <button class="btn btn-magic" style="margin-bottom: 32px;" onclick="copyToClipboard('cover-letter-text', this)">
                         <i class="fa-regular fa-copy"></i> Copy Cover Letter
                     </button>
-                    
                     <h3>Optimized Resume Bullets</h3>
                     <ul>${bulletsHtml}</ul>
                 `;
             } catch (err) {
                 content.innerHTML = `
-                    <div style="display: flex; flex-direction: column; align-items: center; padding: 40px; color: var(--danger);">
+                    <div style="display: flex; flex-direction: column; align-items: center; padding: 40px 20px; color: var(--danger);">
                         <i class="fa-solid fa-triangle-exclamation" style="font-size: 48px; margin-bottom: 16px;"></i>
                         <h3 style="color: var(--danger)">Generation Failed</h3>
                         <p style="text-align: center; max-width: 400px; color: var(--text-secondary); margin-top: 10px;">${escapeHtml(err.message)}</p>
@@ -664,8 +1270,12 @@
         function closeModal() {
             const modalOverlay = document.getElementById('ai-modal');
             modalOverlay.classList.remove('active');
-            setTimeout(() => { modalOverlay.style.display = 'none'; }, 300); // Wait for transition
+            setTimeout(() => { modalOverlay.style.display = 'none'; }, 300);
         }
+
+        document.getElementById('ai-modal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
 
         function copyToClipboard(elementId, btnElement) {
             const text = document.getElementById(elementId).innerText;
@@ -673,13 +1283,10 @@
                 const originalText = btnElement.innerHTML;
                 btnElement.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
                 btnElement.style.background = 'var(--success)';
-                btnElement.style.borderColor = 'var(--success)';
                 btnElement.style.boxShadow = '0 0 15px rgba(16, 185, 129, 0.4)';
-                
                 setTimeout(() => {
                     btnElement.innerHTML = originalText;
                     btnElement.style.background = '';
-                    btnElement.style.borderColor = '';
                     btnElement.style.boxShadow = '';
                 }, 2000);
             });
@@ -690,14 +1297,10 @@
             const iconEl = document.getElementById('scan-icon');
             textEl.innerText = "Scanning Web...";
             iconEl.innerHTML = '<div class="loader" style="width:16px;height:16px;border-width:2px;border-top-color:#fff;"></div>';
-            
-            try {
-                await fetch('/api/scan', { method: 'POST' });
-            } catch (e) {
-                console.error(e);
-            }
-            
-            // Poll for completion instead of hard timeout
+
+            try { await fetch('/api/scan', { method: 'POST' }); }
+            catch (e) { console.error(e); }
+
             const interval = setInterval(async () => {
                 try {
                     const statusRes = await fetch('/api/scan/status');
@@ -707,35 +1310,35 @@
                         textEl.innerText = "Run Scrapers";
                         iconEl.innerHTML = '<i class="fa-solid fa-radar"></i>';
                         loadJobs();
+                        loadStats();
                     }
-                } catch(e) {
-                    clearInterval(interval);
-                }
+                } catch (e) { clearInterval(interval); }
             }, 2000);
         }
 
         function escapeHtml(unsafe) {
             return (unsafe || '').toString()
-                 .replace(/&/g, "&amp;")
-                 .replace(/</g, "&lt;")
-                 .replace(/>/g, "&gt;")
-                 .replace(/"/g, "&quot;")
-                 .replace(/'/g, "&#039;");
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
         }
 
         function timeAgo(dateString) {
             if (!dateString) return 'Recent';
             let postDate = new Date(dateString.replace(/-/g, '/').replace(/T/, ' ').replace(/Z$/, ''));
             if (isNaN(postDate)) return dateString.slice(0, 10);
-            
+
             const diffMs = Math.abs(new Date() - postDate);
             const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
             const diffDays = Math.floor(diffHours / 24);
-            
+
             if (diffDays > 0) return diffDays === 1 ? '1 day ago' : `${diffDays} days ago`;
             if (diffHours > 0) return diffHours === 1 ? '1 hr ago' : `${diffHours} hrs ago`;
             return 'Just now';
         }
     </script>
 </body>
+
 </html>
