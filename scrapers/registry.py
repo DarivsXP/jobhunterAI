@@ -24,6 +24,9 @@ from scrapers.arcdev import ArcDevScraper
 from scrapers.remotify import RemotifyScraper
 from scrapers.hiremeph import HireMePhScraper
 from scrapers.googlejobs import GoogleJobsScraper
+from scrapers.kalibrr import KalibrrScraper
+from scrapers.glints import GlintsScraper
+from scrapers.jobstreetph import JobStreetPhScraper
 
 SCRAPERS = [
     RemotiveScraper(),
@@ -46,4 +49,8 @@ SCRAPERS = [
     RemotifyScraper(),
     HireMePhScraper(),
     GoogleJobsScraper(),
+    # Asia-focused boards
+    KalibrrScraper(),
+    GlintsScraper(),
+    JobStreetPhScraper(),
 ]

@@ -48,7 +48,7 @@ def run_scheduler_worker() -> None:
     scheduler.scan()  # Run initial scan
     import schedule
 
-    schedule.every(1).hours.do(scheduler.scan)
+    schedule.every(30).minutes.do(scheduler.scan)
 
     while True:
         schedule.run_pending()

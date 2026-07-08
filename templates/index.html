@@ -935,6 +935,16 @@
                     <option value="7">Last 7 Days</option>
                     <option value="14">Last 14 Days</option>
                 </select>
+                <select class="filter-select" id="region-filter" onchange="renderBoard()">
+                    <option value="">🌏 All Regions</option>
+                    <option value="asia">🌏 Asia (General)</option>
+                    <option value="philippines">🇵🇭 Philippines</option>
+                    <option value="india">🇮🇳 India</option>
+                    <option value="worldwide">🌐 Worldwide / Remote</option>
+                    <option value="us">🇺🇸 USA / Americas</option>
+                    <option value="eu">🇪🇺 Europe</option>
+                    <option value="apac">🌏 APAC / Oceania</option>
+                </select>
             </div>
             <div class="topbar-hint">
                 <i class="fa-solid fa-hand-pointer"></i> Drag and drop cards to update status
@@ -1121,10 +1131,31 @@
 
         function renderBoard() {
             const searchQuery = document.getElementById('search-box').value.toLowerCase().trim();
+            const regionFilter = document.getElementById('region-filter').value.toLowerCase();
             const cols = { new: [], applied: [], interviewing: [], offer: [], rejected: [], archived: [] };
+
+            // Map region filter values to sets of matching country keywords
+            const regionMap = {
+                'asia': ['asia', 'south asia', 'southeast asia', 'east asia', 'philippines', 'ph', 'india', 'japan', 'malaysia', 'indonesia', 'taiwan', 'south korea', 'vietnam', 'thailand', 'hong kong', 'bangladesh', 'pakistan', 'sri lanka', 'singapore', 'apac', 'asia pacific'],
+                'philippines': ['philippines', 'ph'],
+                'india': ['india', 'in'],
+                'worldwide': ['worldwide', 'remote', 'global', 'anywhere'],
+                'us': ['usa', 'united states', 'us', 'americas', 'latam', 'latin america', 'est', 'pst', 'cst'],
+                'eu': ['europe', 'european union', 'eu', 'emea', 'cet', 'gmt', 'uk', 'united kingdom'],
+                'apac': ['apac', 'asia pacific', 'australia', 'aus', 'new zealand', 'nz', 'oceania', 'singapore'],
+            };
 
             allJobs.forEach(job => {
                 if (searchQuery && !job.title.toLowerCase().includes(searchQuery) && !job.company.toLowerCase().includes(searchQuery)) return;
+
+                // Region filter
+                if (regionFilter) {
+                    const keywords = regionMap[regionFilter] || [];
+                    const jobCountry = (job.country || '').toLowerCase();
+                    const matches = keywords.some(k => jobCountry.includes(k));
+                    if (!matches) return;
+                }
+
                 const status = job.application_status || 'new';
                 if (cols[status]) cols[status].push(job);
             });

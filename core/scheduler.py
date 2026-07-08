@@ -28,7 +28,7 @@ class Scheduler:
 
         logger.info("Scheduler started.")
 
-        schedule.every(1).hours.do(self.scan)
+        schedule.every(30).minutes.do(self.scan)
 
         # Run immediately
 

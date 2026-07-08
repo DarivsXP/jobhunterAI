@@ -68,14 +68,15 @@ class JobPrefilter:
         is_support_title = "support" in title
 
         # If it's a support role, we allow up to 5 years of experience.
-        # If it is a junior role, we allow up to 4 years.
-        # Otherwise, we allow up to 3 years.
+        # If it is a junior role, we allow up to 5 years.
+        # Otherwise, we allow up to 4 years (was 3; relaxed to capture more roles
+        # that are technically mid-level but match Cyril's growing skillset).
         if is_support_title:
             max_allowed_years = 5
         elif is_junior_title:
-            max_allowed_years = 4
+            max_allowed_years = 5
         else:
-            max_allowed_years = 3
+            max_allowed_years = 4
 
         matches = re.finditer(
             r"\b(\d+)\+?\s*(?:-\s*\d+\+?|\s+to\s+\d+)?\s*(?:years?|yrs?)\b",
