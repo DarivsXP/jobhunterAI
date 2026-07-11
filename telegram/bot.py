@@ -29,8 +29,12 @@ class TelegramBot:
 
     def send(self, message: str) -> bool:
         if not self.is_enabled:
-            logger.info("Telegram disabled. Skipping notification send.")
+            logger.info("Telegram disabled — token or chat_id missing. Skipping notification.")
             return False
+
+        # Telegram messages have a 4096-char hard limit
+        if len(message) > 4096:
+            message = message[:4090] + "\\.\\.\\."
 
         try:
             response = requests.post(
@@ -40,26 +44,50 @@ class TelegramBot:
                     "text": message,
                     "parse_mode": "MarkdownV2",
                     "disable_web_page_preview": True,
+                    "disable_notification": False,
                 },
                 timeout=30,
             )
-            response.raise_for_status()
-            logger.info("Telegram message sent.")
+
+            if not response.ok:
+                # Log the full Telegram error so we can see exactly what went wrong
+                logger.error(
+                    "Telegram API rejected message (status %d): %s",
+                    response.status_code,
+                    response.text,
+                )
+                return False
+
+            logger.info("Telegram message sent successfully.")
             return True
 
+        except requests.exceptions.Timeout:
+            logger.error("Telegram send timed out.")
+            return False
+
         except Exception:
-            logger.exception("Telegram send failed.")
+            logger.exception("Telegram send failed with unexpected error.")
             return False
 
     def send_hot_match(self, job: Job) -> bool:
+        logger.info("Sending HOT match notification: %s @ %s", job.title, job.company)
         return self.send(format_job_message(job))
 
     def send_high_match(self, job: Job) -> bool:
+        logger.info("Sending HIGH match notification: %s @ %s", job.title, job.company)
         return self.send(format_job_message(job))
 
     def send_digest(self, jobs: list[Job]) -> bool:
+        logger.info("Sending digest for %d jobs.", len(jobs))
         return self.send(format_digest(jobs))
 
     def send_error(self, message: str) -> bool:
         safe_message = escape_markdown(message)
         return self.send(f"*JobHunterAI Error*\n\n{safe_message}")
+
+    def test_connection(self) -> bool:
+        """Send a test ping to verify the bot token and chat_id are valid."""
+        if not self.is_enabled:
+            logger.warning("Cannot test: Telegram token or chat_id is missing.")
+            return False
+        return self.send("✅ *JobHunterAI* is online and connected\\!")

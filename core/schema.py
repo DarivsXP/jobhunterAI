@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS jobs (
     ai_reasoning TEXT DEFAULT '',
     application_status TEXT DEFAULT 'new',
     applied INTEGER DEFAULT 0,
+    notes TEXT DEFAULT '',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )
 """

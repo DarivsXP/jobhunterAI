@@ -28,19 +28,19 @@ class JobOrchestrator:
         logger.info("=" * 60)
 
         #
-        # Step 1
+        # Step 1 — Scrape
         #
-        jobs = self.scraper.collect_jobs()
-        logger.info("Scraped %d jobs", len(jobs))
+        scraped_jobs = self.scraper.collect_jobs()
+        logger.info("Scraped %d jobs", len(scraped_jobs))
 
         #
-        # Step 2
+        # Step 2 — Normalise + filter + deduplicate in-memory
         #
-        jobs = self.pipeline.process(jobs)
+        jobs = self.pipeline.process(scraped_jobs)
         logger.info("Pipeline kept %d jobs", len(jobs))
 
         #
-        # Step 3
+        # Step 3 — Score, rank, AI-enrich (skips DB duplicates)
         #
         jobs = self.recruiter.process(
             jobs,
@@ -49,19 +49,26 @@ class JobOrchestrator:
         logger.info("Recruiter accepted %d jobs", len(jobs))
 
         #
-        # Step 4
+        # Step 4 — Persist; only newly-inserted jobs are returned for notification
         #
+        # Filter to jobs not yet in DB before saving so we know exactly what's new
+        new_jobs = self.database.filter_new_jobs(jobs)
         saved = self.database.save_all(jobs)
 
         logger.info(
-            "Saved %d new jobs",
+            "Saved %d new jobs (%d were already in DB)",
             saved,
+            len(jobs) - saved,
         )
 
         #
-        # Step 5
+        # Step 5 — Notify only for jobs that were actually new this run
         #
-        self.notification.notify(jobs)
+        self.notification.notify(
+            new_jobs=new_jobs,
+            total_scraped=len(scraped_jobs),
+            total_kept=len(jobs),
+        )
 
         hot = sum(job.priority == "HOT" for job in jobs)
         high = sum(job.priority == "HIGH" for job in jobs)
@@ -70,7 +77,9 @@ class JobOrchestrator:
         logger.info("=" * 60)
         logger.info("JOB SCAN COMPLETE")
         logger.info("=" * 60)
+        logger.info("Scraped  : %d", len(scraped_jobs))
         logger.info("Accepted : %d", len(jobs))
+        logger.info("New      : %d", saved)
         logger.info("HOT      : %d", hot)
         logger.info("HIGH     : %d", high)
         logger.info("GOOD     : %d", good)

@@ -35,6 +35,10 @@ class MigrationManager:
             self._migration_v4()
             self._set_version(4)
 
+        if version < 5:
+            self._migration_v5()
+            self._set_version(5)
+
         logger.info("Database schema is up to date.")
 
     def _ensure_schema_version_table(self) -> None:
@@ -111,6 +115,17 @@ class MigrationManager:
         self._add_missing_columns(columns)
         self.connection.commit()
         logger.info("Migration v4 complete.")
+
+    def _migration_v5(self) -> None:
+        logger.info("Running migration v5...")
+
+        columns = {
+            "notes": "TEXT DEFAULT ''",
+        }
+
+        self._add_missing_columns(columns)
+        self.connection.commit()
+        logger.info("Migration v5 complete.")
 
     def _add_missing_columns(self, columns: dict[str, str]) -> None:
         for column, definition in columns.items():

@@ -76,11 +76,12 @@ class DatabaseService:
                         ai_recommendation,
                         ai_reasoning,
                         application_status,
-                        applied
+                        applied,
+                        notes
                     )
                     VALUES
                     (
-                        ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?
+                        ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?
                     )
                     """,
                     (
@@ -103,6 +104,7 @@ class DatabaseService:
                         job.ai_reasoning,
                         "new",
                         0,
+                        "",
                     ),
                 )
 
@@ -184,7 +186,8 @@ class DatabaseService:
                     created_at,
                     posted_at,
                     description,
-                    salary
+                    salary,
+                    notes
                 FROM jobs
             """
             params: list[object] = []
@@ -212,7 +215,7 @@ class DatabaseService:
                     id, title, company, source, url, country, score, priority,
                     interview_probability, matched_skills_json, missing_skills_json,
                     ai_recommendation, ai_reasoning, application_status,
-                    created_at, posted_at, description, salary
+                    created_at, posted_at, description, salary, notes
                 FROM jobs
                 WHERE id = ?
             """
@@ -273,6 +276,21 @@ class DatabaseService:
         finally:
             conn.close()
 
+    def update_notes(self, job_id: int, notes: str) -> bool:
+        conn = self.db.connect()
+
+        try:
+            cursor = conn.cursor()
+            cursor.execute(
+                "UPDATE jobs SET notes = ? WHERE id = ?",
+                (notes.strip(), job_id),
+            )
+            conn.commit()
+            return cursor.rowcount > 0
+
+        finally:
+            conn.close()
+
     def _row_to_job_summary(self, row: Row) -> dict[str, object]:
         return {
             "id": int(row["id"]),
@@ -293,4 +311,5 @@ class DatabaseService:
             "posted_at": row["posted_at"] or "",
             "description": row["description"] or "",
             "salary": row["salary"] or "Not specified",
+            "notes": row["notes"] or "",
         }
