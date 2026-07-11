@@ -24,12 +24,11 @@ logger = get_logger(__name__)
 class JobicyScraper(BaseScraper):
     BASE_URL = "https://jobicy.com/api/v2/remote-jobs"
 
-    # Geo tags Jobicy supports that are relevant for PH/India/Asia
+    # Geo tags Jobicy supports that are relevant for PH/Asia.
+    # Note: "asia" and "india" return HTTP 400 — they are not valid geo values.
     GEO_FEEDS = [
-        ("Worldwide", None),          # No geo filter — global remote jobs
-        ("Asia", "asia"),             # Asia region — covers PH, India, SE Asia
-        ("Philippines", "philippines"),
-        ("India", "india"),
+        ("Worldwide", None),           # No geo filter — global remote jobs
+        ("Philippines", "philippines"), # PH-specific feed
     ]
 
     def fetch_jobs(self) -> List[Job]:

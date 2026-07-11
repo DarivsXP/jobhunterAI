@@ -2,6 +2,16 @@
 Scraper Registry
 
 Register every scraper here.
+
+Removed scrapers (broken as of 2026-07):
+  - GoogleJobsScraper    : Always CAPTCHA-blocked in headless mode
+  - KalibrrScraper       : API endpoint returns 404 (removed/changed)
+  - GlintsScraper        : API returns 400 for all queries (now requires auth)
+  - JobStreetPhScraper   : Returns 403 Forbidden (blocks server-side requests)
+  - ArcDevScraper        : Playwright timeout — JS-heavy SPA, no public API
+  - RemotifyScraper      : Playwright timeout — JS-heavy, low yield
+  - DynamiteJobsScraper  : Playwright — consistently returns 0 jobs
+  - JustRemoteScraper    : Playwright — returns only 1 job, not worth overhead
 """
 
 from scrapers.arbeitnow import ArbeitnowScraper
@@ -17,18 +27,12 @@ from scrapers.larajobs import LaraJobsScraper
 from scrapers.vuejobs import VueJobsScraper
 from scrapers.pythonorg import PythonOrgScraper
 from scrapers.onlinejobsph import OnlineJobsPhScraper
-from scrapers.dynamitejobs import DynamiteJobsScraper
-from scrapers.justremote import JustRemoteScraper
 from scrapers.hubstafftalent import HubstaffTalentScraper
-from scrapers.arcdev import ArcDevScraper
-from scrapers.remotify import RemotifyScraper
 from scrapers.hiremeph import HireMePhScraper
-from scrapers.googlejobs import GoogleJobsScraper
-from scrapers.kalibrr import KalibrrScraper
-from scrapers.glints import GlintsScraper
-from scrapers.jobstreetph import JobStreetPhScraper
+from scrapers.nodesk import NoDeskScraper
 
 SCRAPERS = [
+    # Global / international remote job boards (API-based, reliable)
     RemotiveScraper(),
     RemoteOKScraper(),
     WeWorkRemotelyScraper(),
@@ -38,19 +42,13 @@ SCRAPERS = [
     WorkingNomadsScraper(),
     RemoteCoScraper(),
     JobsColliderScraper(),
+    # Niche / tech-specific boards (RSS/API-based, reliable)
     LaraJobsScraper(),
     VueJobsScraper(),
     PythonOrgScraper(),
-    OnlineJobsPhScraper(),
-    DynamiteJobsScraper(),
-    JustRemoteScraper(),
     HubstaffTalentScraper(),
-    ArcDevScraper(),
-    RemotifyScraper(),
+    NoDeskScraper(),
+    # Philippines-specific boards
+    OnlineJobsPhScraper(),
     HireMePhScraper(),
-    GoogleJobsScraper(),
-    # Asia-focused boards
-    KalibrrScraper(),
-    GlintsScraper(),
-    JobStreetPhScraper(),
 ]

@@ -1,8 +1,8 @@
 """
-Remote.co Scraper
+NoDesk Scraper
 
-Parses the curated RSS feed for developer jobs.
-https://remote.co/remote-jobs/developer/feed/
+NoDesk is a curated remote job board with a public RSS feed.
+No API key needed.
 """
 
 from __future__ import annotations
@@ -19,26 +19,26 @@ from scrapers.base import BaseScraper
 logger = get_logger(__name__)
 
 
-class RemoteCoScraper(BaseScraper):
-    _FEED_URLS = [
-        "https://remote.co/remote-jobs/developer/feed/",
-        "https://remote.co/remote-jobs/customer-service/feed/",
+class NoDeskScraper(BaseScraper):
+    _FEEDS = [
+        ("https://nodesk.co/remote-jobs/engineering/feed/", "Engineering"),
+        ("https://nodesk.co/remote-jobs/developer/feed/", "Developer"),
     ]
     _html_tags = re.compile(r"<[^>]+>")
     _whitespace = re.compile(r"\s+")
 
     def fetch_jobs(self) -> list[Job]:
-        logger.info("Fetching jobs from Remote.co...")
+        logger.info("Fetching jobs from NoDesk...")
 
         all_jobs: list[Job] = []
         seen_urls: set[str] = set()
 
-        for feed_url in self._FEED_URLS:
+        for feed_url, category in self._FEEDS:
             try:
                 response = requests.get(
                     feed_url,
                     headers={"User-Agent": "JobHunterAI/1.0"},
-                    timeout=(8, 10),  # (connect, read) — fail fast, Remote.co often blocks
+                    timeout=(8, 12),
                 )
                 response.raise_for_status()
                 root = ET.fromstring(response.text)
@@ -50,17 +50,16 @@ class RemoteCoScraper(BaseScraper):
                     seen_urls.add(url)
 
                     title = (item.findtext("title") or "").strip()
+                    if not title:
+                        continue
+
                     description_raw = item.findtext("description") or ""
                     description = self._clean(description_raw)
                     posted_at = (item.findtext("pubDate") or "").strip()
 
-                    # Try to extract company from the <author> or description
-                    company = (item.findtext("author") or "").strip()
-                    if not company:
-                        creator = item.findtext(
-                            "{http://purl.org/dc/elements/1.1/}creator"
-                        ) or ""
-                        company = creator.strip() or "Unknown"
+                    company = (
+                        item.findtext("{http://purl.org/dc/elements/1.1/}creator") or ""
+                    ).strip() or "Unknown"
 
                     all_jobs.append(
                         Job(
@@ -72,14 +71,14 @@ class RemoteCoScraper(BaseScraper):
                             salary="Not specified",
                             country="Worldwide",
                             remote=True,
-                            source="Remote.co",
+                            source="NoDesk",
                         )
                     )
 
             except Exception:
-                logger.exception("Remote.co request failed for %s", feed_url)
+                logger.exception("NoDesk request failed for %s", feed_url)
 
-        logger.info("Fetched %d Remote.co jobs.", len(all_jobs))
+        logger.info("Fetched %d NoDesk jobs.", len(all_jobs))
         return all_jobs
 
     def _clean(self, value: str) -> str:
