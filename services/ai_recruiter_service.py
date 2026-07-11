@@ -32,9 +32,10 @@ class AIRecruiterAnalysis:
 class AIRecruiterService:
     _url = settings.openai_base_url
     _prompt_path = Path("prompts/recruiter.txt")
+    _quota_exceeded = False
 
     def is_enabled(self) -> bool:
-        return bool(settings.openai_api_key)
+        return bool(settings.openai_api_key) and not self._quota_exceeded
 
     def evaluate(self, job: Job) -> AIRecruiterAnalysis | None:
         if not self.is_enabled():
@@ -67,6 +68,16 @@ class AIRecruiterService:
                 )
 
                 if response.status_code == 429:
+                    try:
+                        err_json = response.json()
+                        err_code = err_json.get("error", {}).get("code", "")
+                        if err_code == "insufficient_quota":
+                            logger.error("OpenAI insufficient quota. Disabling AI recruiter for this scan.")
+                            self._quota_exceeded = True
+                            return None
+                    except Exception:
+                        pass
+
                     if attempt < len(retry_delays):
                         logger.warning(
                             "OpenAI rate limited (429) for %s — retrying in %ds (attempt %d/%d)",

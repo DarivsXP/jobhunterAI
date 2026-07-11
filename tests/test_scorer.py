@@ -35,26 +35,31 @@ class RecruiterThresholdTest(unittest.TestCase):
 
     def test_discourages_adjacent_devops_roles(self) -> None:
         recruiter = Recruiter()
-        job = Job(
-            title="Devops & Platform Engineer (Aws / Ci/Cd)",
-            company="Example Co",
-            description=(
-                "Remote role using Python, GitHub, REST APIs, JavaScript, "
-                "and Git. Option to work remote in United Kingdom."
-            ),
-            url="https://example.com/jobs/devops",
-            posted_at="2026-06-27",
-            salary="Not specified",
-            country="United Kingdom",
-            remote=True,
-            source="UnitTest",
-            fingerprint="devops-job",
-        )
+        original_minimum_score = MY_PROFILE.minimum_score
+        MY_PROFILE.minimum_score = 55
+        try:
+            job = Job(
+                title="Devops & Platform Engineer (Aws / Ci/Cd)",
+                company="Example Co",
+                description=(
+                    "Remote role using Python, GitHub, REST APIs, JavaScript, "
+                    "and Git. Option to work remote in United Kingdom."
+                ),
+                url="https://example.com/jobs/devops",
+                posted_at="2026-06-27",
+                salary="Not specified",
+                country="United Kingdom",
+                remote=True,
+                source="UnitTest",
+                fingerprint="devops-job",
+            )
 
-        evaluation = recruiter.evaluate(job)
+            evaluation = recruiter.evaluate(job)
 
-        self.assertLess(evaluation.score, MY_PROFILE.minimum_score)
-        self.assertFalse(evaluation.accepted)
+            self.assertLess(evaluation.score, MY_PROFILE.minimum_score)
+            self.assertFalse(evaluation.accepted)
+        finally:
+            MY_PROFILE.minimum_score = original_minimum_score
 
     def test_keeps_php_web_roles_viable(self) -> None:
         recruiter = Recruiter()

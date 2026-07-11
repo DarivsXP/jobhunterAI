@@ -23,6 +23,9 @@ class StubAIRecruiter:
     def evaluate(self, job: Job) -> AIRecruiterAnalysis | None:
         return self.analysis
 
+    def is_enabled(self) -> bool:
+        return self.analysis is not None
+
 
 class RecruiterServiceTest(unittest.TestCase):
     def test_accepts_matching_job_without_ai_service_dependency(self) -> None:

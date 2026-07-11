@@ -87,7 +87,7 @@ class JobPrefilterTest(unittest.TestCase):
         job = Job(
             title="Software Engineer",
             company="Example Co",
-            description="We require 3+ years of experience in PHP.",
+            description="We require 5+ years of experience in PHP.",
             url="https://example.com/jobs/se",
             posted_at="2026-06-27",
             salary="Not specified",
@@ -115,7 +115,7 @@ class JobPrefilterTest(unittest.TestCase):
         job = Job(
             title="Junior Backend Developer",
             company="Example Co",
-            description="Requirements: at least 4 years of experience.",
+            description="Requirements: at least 6 years of experience.",
             url="https://example.com/jobs/jr",
             posted_at="2026-06-27",
             salary="Not specified",
@@ -201,13 +201,13 @@ class JobPrefilterTest(unittest.TestCase):
         )
         self.assertTrue(self.prefilter.should_keep(job))
 
-    def test_rejects_technical_support_role_requiring_five_years_experience(self) -> None:
+    def test_rejects_technical_support_role_requiring_six_years_experience(self) -> None:
         import datetime
         recent_date = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
         job = Job(
             title="Technical Support Engineer",
             company="Example Co",
-            description="Requirements: at least 5 years of experience.",
+            description="Requirements: at least 6 years of experience.",
             url="https://example.com/jobs/support-5",
             posted_at=recent_date,
             salary="Not specified",
