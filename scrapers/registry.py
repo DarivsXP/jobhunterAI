@@ -29,7 +29,6 @@ from scrapers.pythonorg import PythonOrgScraper
 from scrapers.onlinejobsph import OnlineJobsPhScraper
 from scrapers.hubstafftalent import HubstaffTalentScraper
 from scrapers.hiremeph import HireMePhScraper
-from scrapers.nodesk import NoDeskScraper
 
 SCRAPERS = [
     # Global / international remote job boards (API-based, reliable)
@@ -47,7 +46,6 @@ SCRAPERS = [
     VueJobsScraper(),
     PythonOrgScraper(),
     HubstaffTalentScraper(),
-    NoDeskScraper(),
     # Philippines-specific boards
     OnlineJobsPhScraper(),
     HireMePhScraper(),
